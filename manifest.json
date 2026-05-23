@@ -1,0 +1,16 @@
+{
+  "name": "AI GGB 智能几何画板",
+  "short_name": "AI GGB",
+  "description": "上传几何题目图片，AI 自动识别并绘制图形",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#4f46e5",
+  "icons": [
+    {
+      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📐</text></svg>",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+}

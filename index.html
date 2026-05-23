@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="description" content="AI GGB 智能几何画板 - 上传几何题目图片，AI 自动识别并绘制图形">
+    <meta name="theme-color" content="#4f46e5">
+    <title>AI GGB - 智能几何画板</title>
+    <link rel="manifest" href="manifest.json">
+    <style>
+    *{margin:0;padding:0;box-sizing:border-box}
+    :root{--primary:#4f46e5;--primary-dark:#4338ca;--primary-light:#e0e7ff;--green:#10b981;--green-dark:#059669;--green-light:#d1fae5;--gray:#6b7280;--gray-light:#f3f4f6;--gray-lighter:#f9fafb;--red:#ef4444;--red-dark:#dc2626;--orange:#f59e0b;--orange-light:#fef3c7;--bg:#f8fafc;--text:#1e293b;--text-secondary:#64748b;--border:#e2e8f0;--shadow:0 1px 3px rgba(0,0,0,.06),0 1px 2px rgba(0,0,0,.04);--shadow-md:0 4px 6px rgba(0,0,0,.07),0 2px 4px rgba(0,0,0,.06);--shadow-lg:0 10px 15px rgba(0,0,0,.1),0 4px 6px rgba(0,0,0,.05);--radius:8px;--radius-lg:12px;--font:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,'PingFang SC','Microsoft YaHei',sans-serif;--right-width:420px}
+    body{font-family:var(--font);overflow:hidden;background:var(--bg);color:var(--text);font-size:13px;line-height:1.6}
+    #app{display:flex;height:100vh;width:100vw}
+    #left-panel{flex:1;height:100%;display:flex;flex-direction:column;background:#fff;overflow:hidden;position:relative}
+    .canvas-toolbar{display:flex;align-items:center;justify-content:space-between;padding:8px 16px;border-bottom:1px solid var(--border);flex-shrink:0;background:var(--gray-lighter)}
+    .toolbar-left{display:flex;align-items:center;gap:8px}
+    .toolbar-logo{font-size:18px}
+    .toolbar-title{font-size:14px;font-weight:700;color:var(--text);letter-spacing:-.3px}
+    .toolbar-right{display:flex;gap:6px}
+    .toolbar-btn{height:30px;padding:0 10px;border:1px solid var(--border);background:#fff;border-radius:var(--radius);cursor:pointer;display:flex;align-items:center;gap:4px;font-size:11px;font-weight:500;color:var(--text-secondary);font-family:var(--font);transition:all .15s}
+    .toolbar-btn:hover{background:var(--gray-light);color:var(--text);border-color:var(--gray)}
+    .toolbar-btn svg{flex-shrink:0}
+    .canvas-area{flex:1;display:flex;overflow:hidden;background:#fff}
+    #geogebra-container{flex:1;overflow:hidden;background:#fff;min-width:0}
+    #geogebra-3d-container{flex:1;overflow:hidden;background:#fff;min-width:0;border-left:2px solid var(--border)}
+    #ggb-element{width:100%;height:100%}
+    .ggb-loading{display:flex;align-items:center;justify-content:center;height:100%;color:var(--text-secondary);font-size:14px;gap:8px}
+    .ggb-loading .spinner{width:24px;height:24px;border:3px solid var(--border);border-top-color:var(--primary);border-radius:50%;animation:spin .8s linear infinite}
+    @keyframes spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+    #right-panel{width:var(--right-width);min-width:var(--right-width);max-width:var(--right-width);height:100%;display:flex;flex-direction:column;background:#fff;border-left:1px solid var(--border)}
+    .chat-header{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;border-bottom:1px solid var(--border);flex-shrink:0;background:var(--gray-lighter)}
+    .chat-header-left{display:flex;align-items:center;gap:8px}
+    .chat-header-title{font-size:14px;font-weight:700;color:var(--text)}
+    .model-badge{font-size:10px;padding:2px 8px;border-radius:10px;background:var(--primary-light);color:var(--primary);font-weight:600;max-width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+    .chat-header-right{display:flex;align-items:center;gap:4px}
+    .conn-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;background:var(--red);transition:background .3s}
+    .conn-dot.connected{background:var(--green)}
+    .conn-dot.connecting{background:var(--orange)}
+    .icon-btn{width:32px;height:32px;border:none;background:transparent;border-radius:var(--radius);cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--gray);transition:all .15s}
+    .icon-btn:hover{background:var(--gray-light);color:var(--text)}
+    .view{display:none;flex-direction:column;flex:1;overflow:hidden}
+    .view.active{display:flex}
+    #messages-list{flex:1;overflow-y:auto;padding:12px 14px}
+    </style>
+    <link rel="stylesheet" href="styles.css" media="print" onload="this.media='all'">
+    <noscript><link rel="stylesheet" href="styles.css"></noscript>
+</head>
+<body>
+    <div id="app">
+        <div id="left-panel">
+            <div class="canvas-toolbar">
+                <div class="toolbar-left">
+                    <span class="toolbar-logo">📐</span>
+                    <span class="toolbar-title">AI GGB 智能几何画板</span>
+                </div>
+                <div class="toolbar-right">
+                    <div class="dropdown" id="perspective-dropdown">
+                        <button class="toolbar-btn" id="btn-perspective" title="切换视图">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+                            <span id="perspective-label">几何视图</span>
+                            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+                        </button>
+                        <div class="dropdown-menu" id="perspective-menu">
+                            <button class="dropdown-item active" data-mode="G">📐 几何视图</button>
+                            <button class="dropdown-item" data-mode="AG">📊 代数+几何</button>
+                            <button class="dropdown-item" data-mode="AGT">🧊 代数+几何+3D</button>
+                        </div>
+                    </div>
+                    <button class="toolbar-btn" id="btn-import-ggb" title="导入 .ggb 文件">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                        <span>导入</span>
+                    </button>
+                    <input type="file" id="import-file-input" accept=".ggb,.xml" hidden>
+                    <button class="toolbar-btn" id="btn-export-ggb" title="导出 .ggb 文件">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                        <span>导出</span>
+                    </button>
+                </div>
+            </div>
+            <div class="canvas-area">
+                <div id="geogebra-container"><div class="ggb-loading"><div class="spinner"></div><span>GeoGebra 加载中…</span></div></div>
+                <div id="geogebra-3d-container" style="display:none;"></div>
+            </div>
+        </div>
+
+        <div id="right-panel">
+            <div class="chat-header">
+                <div class="chat-header-left">
+                    <span class="conn-dot" id="conn-dot" title="未连接"></span>
+                    <span class="chat-header-title">AI 助手</span>
+                    <span class="model-badge" id="model-badge"></span>
+                </div>
+                <div class="chat-header-right">
+                    <button class="icon-btn" id="btn-history" title="历史记录">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                    </button>
+                    <button class="icon-btn" id="btn-config" title="设置">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+                    </button>
+                </div>
+            </div>
+
+            <div id="view-chat" class="view active">
+                <div id="messages-list"></div>
+            </div>
+
+            <div id="view-history" class="view">
+                <div class="view-header">
+                    <button class="icon-btn" id="btn-back-chat" title="返回">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+                    </button>
+                    <span class="view-title">历史记录</span>
+                    <button class="icon-btn" id="btn-new-conv" title="新建对话">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                    </button>
+                </div>
+                <div id="history-list"></div>
+            </div>
+
+            <div class="input-area">
+                <div class="input-preview" id="input-preview" style="display:none;">
+                    <img id="preview-img" src="" alt="">
+                    <button class="preview-remove" id="preview-remove" title="移除">
+                        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                    </button>
+                </div>
+                <form id="chat-form" autocomplete="off">
+                    <div class="input-row">
+                        <textarea id="chat-input" placeholder="输入几何问题描述或指令…" rows="1"></textarea>
+                        <div class="input-side-btns">
+                            <button type="button" class="input-icon-btn" id="btn-beautify" title="GGB 美化">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+                            </button>
+                            <button type="button" class="input-icon-btn" id="btn-upload" title="上传图片">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+                            </button>
+                            <button type="button" id="stop-btn" class="stop-btn" title="停止生成" style="display:none;">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="6" width="12" height="12" rx="2"/></svg>
+                            </button>
+                            <button type="button" id="send-btn" title="发送">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+                <input type="file" id="file-input" accept="image/*" style="position:absolute;width:0;height:0;opacity:0;pointer-events:none">
+                <div class="input-hint"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg> GGB 脚本自动执行&emsp;<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M6 8h.01"/><path d="M10 8h.01"/><path d="M14 8h.01"/><path d="M18 8h.01"/><path d="M6 12h.01"/><path d="M18 12h.01"/><path d="M8 16h8"/></svg> Enter 发送 / Shift+Enter 换行</div>
+            </div>
+            <div class="copyright">Copyright © 2020 - <span id="copyright-year"></span> E家分享</div>
+        </div>
+    </div>
+
+    <div id="config-modal" class="modal">
+        <div class="modal-overlay" id="config-overlay"></div>
+        <div class="modal-content">
+            <div class="modal-header">
+                <span class="modal-title">⚙️ 设置</span>
+                <button class="icon-btn" id="btn-close-config">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>AI 模型平台</label>
+                    <select id="platform-select">
+                        <option value="">-- 自定义 --</option>
+                        <option value="nvidia">NVIDIA NIM</option>
+                        <option value="openrouter">OpenRouter</option>
+                        <option value="iamhc">新疆幻城网安科技公益大模型</option>
+                        <option value="blazeapi">BlazeAPI</option>
+                        <option value="poixe">Poixe AI</option>
+                        <option value="gemini">Google Gemini</option>
+                        <option value="gemini_local">Google Gemini (本地)</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>API 地址</label>
+                    <div class="input-with-btn">
+                        <input type="text" id="base-url" placeholder="如 https://api.openai.com/v1">
+                        <button type="button" class="fetch-btn" id="btn-fetch-models" title="获取可用模型">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+                            获取模型
+                        </button>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>API Key</label>
+                    <div class="input-with-btn api-key-wrapper">
+                        <input type="password" id="api-key" placeholder="输入 API Key">
+                        <button type="button" class="toggle-key-visibility" id="btn-toggle-key" title="显示/隐藏 API Key">
+                            <svg class="eye-off" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+                            <svg class="eye-on" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                        </button>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>模型</label>
+                    <select id="model-select">
+                        <option value="">-- 请先获取模型列表 --</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>系统提示词</label>
+                    <textarea id="system-prompt" rows="3" placeholder="自定义系统提示词"></textarea>
+                </div>
+                <div class="divider"></div>
+                <div class="form-group">
+                    <label class="checkbox-label"><input type="checkbox" id="use-proxy"> 启用 CORS 代理</label>
+                </div>
+                <div class="form-group">
+                    <label>代理地址</label>
+                    <input type="text" id="proxy-url" placeholder="https://your-proxy.workers.dev">
+                </div>
+                <div class="divider"></div>
+                <div class="form-group">
+                    <label class="checkbox-label"><input type="checkbox" id="use-tools" checked> 启用函数调用 (Function Calling)</label>
+                    <div class="form-hint">如果模型不支持工具调用，请取消勾选</div>
+                </div>
+                <div class="form-group">
+                    <label class="checkbox-label"><input type="checkbox" id="auto-execute" checked> 自动执行 GGB 脚本</label>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-primary" id="btn-save-config">保存</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="beautify-panel" class="side-panel">
+        <div class="side-panel-header">
+            <span class="side-panel-title">🎨 GGB 画板美化</span>
+            <button class="icon-btn" id="btn-close-beautify">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            </button>
+        </div>
+        <div class="side-panel-body">
+            <div class="beautify-section">
+                <div class="beautify-section-title">🎨 画板背景</div>
+                <div class="beautify-color-row">
+                    <button class="beautify-color-btn" data-cmd="SetBackgroundColor(1,1,1)" style="background:#fff" title="白色"></button>
+                    <button class="beautify-color-btn" data-cmd="SetBackgroundColor(0.96,0.96,0.96)" style="background:#f5f5f5" title="浅灰"></button>
+                    <button class="beautify-color-btn" data-cmd="SetBackgroundColor(0.94,0.95,0.97)" style="background:#eff1f7" title="浅蓝"></button>
+                    <button class="beautify-color-btn" data-cmd="SetBackgroundColor(0.93,0.96,0.93)" style="background:#edf5ed" title="浅绿"></button>
+                    <button class="beautify-color-btn" data-cmd="SetBackgroundColor(0.96,0.93,0.88)" style="background:#f5ede0" title="暖色"></button>
+                    <button class="beautify-color-btn" data-cmd="SetBackgroundColor(1,0.98,0.9)" style="background:#fffae6" title="米黄"></button>
+                </div>
+            </div>
+            <div class="beautify-section">
+                <div class="beautify-section-title">📐 视图设置</div>
+                <div class="beautify-toggle-row">
+                    <span class="beautify-label">显示坐标轴</span>
+                    <label class="beautify-switch"><input type="checkbox" id="beautify-axes" checked><span class="beautify-slider"></span></label>
+                </div>
+                <div class="beautify-toggle-row">
+                    <span class="beautify-label">显示网格</span>
+                    <label class="beautify-switch"><input type="checkbox" id="beautify-grid" checked><span class="beautify-slider"></span></label>
+                </div>
+
+            </div>
+            <div class="beautify-section">
+                <div class="beautify-section-title">✏️ 对象样式</div>
+                <div class="beautify-slider-row">
+                    <span class="beautify-label">点大小</span>
+                    <input type="range" id="beautify-point-size" min="1" max="9" value="3" step="1">
+                    <span class="beautify-value" id="beautify-point-size-val">3</span>
+                </div>
+                <div class="beautify-slider-row">
+                    <span class="beautify-label">线粗细</span>
+                    <input type="range" id="beautify-line-thickness" min="1" max="13" value="2" step="1">
+                    <span class="beautify-value" id="beautify-line-thickness-val">2</span>
+                </div>
+                <div class="beautify-toggle-row">
+                    <span class="beautify-label">显示标签</span>
+                    <label class="beautify-switch"><input type="checkbox" id="beautify-labels" checked><span class="beautify-slider"></span></label>
+                </div>
+            </div>
+            <div class="beautify-section">
+                <div class="beautify-section-title">🖼️ 一键美化</div>
+                <div class="beautify-preset-row">
+                    <button class="beautify-preset-btn" data-preset="light">☀️ 浅色经典</button>
+                    <button class="beautify-preset-btn" data-preset="warm">🌅 暖色教学</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="beautify-overlay" class="side-panel-overlay"></div>
+
+    <div id="algebra-panel" class="algebra-panel" style="display:none;">
+        <div class="algebra-header">
+            <span>📐 代数区</span>
+            <button class="icon-btn" id="btn-close-algebra">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            </button>
+        </div>
+        <div class="algebra-symbols">
+            <button class="sym-btn" data-insert="^">xⁿ</button>
+            <button class="sym-btn" data-insert="sqrt(">√</button>
+            <button class="sym-btn" data-insert="abs(">|x|</button>
+            <button class="sym-btn" data-insert="sin(">sin</button>
+            <button class="sym-btn" data-insert="cos(">cos</button>
+            <button class="sym-btn" data-insert="tan(">tan</button>
+            <button class="sym-btn" data-insert="asin(">arcsin</button>
+            <button class="sym-btn" data-insert="acos(">arccos</button>
+            <button class="sym-btn" data-insert="atan(">arctan</button>
+            <button class="sym-btn" data-insert="log(">ln</button>
+            <button class="sym-btn" data-insert="log10(">lg</button>
+            <button class="sym-btn" data-insert="exp(">eˣ</button>
+            <button class="sym-btn" data-insert="pi">π</button>
+            <button class="sym-btn" data-insert="Degree">°</button>
+            <button class="sym-btn" data-insert="&lt;">&lt;</button>
+            <button class="sym-btn" data-insert="&gt;">&gt;</button>
+            <button class="sym-btn" data-insert="=">=</button>
+            <button class="sym-btn" data-insert="{">{</button>
+            <button class="sym-btn" data-insert="}">}</button>
+            <button class="sym-btn" data-insert="(">(</button>
+            <button class="sym-btn" data-insert=")">)</button>
+            <button class="sym-btn" data-insert="[">[</button>
+            <button class="sym-btn" data-insert="]">]</button>
+            <button class="sym-btn" data-insert=",">,</button>
+            <button class="sym-btn" data-insert="/">/</button>
+            <button class="sym-btn" data-insert="*">×</button>
+            <button class="sym-btn" data-insert="Alpha">α</button>
+            <button class="sym-btn" data-insert="Beta">β</button>
+            <button class="sym-btn" data-insert="Gamma">γ</button>
+            <button class="sym-btn" data-insert="Theta">θ</button>
+            <button class="sym-btn" data-insert="Phi">φ</button>
+            <button class="sym-btn" data-insert="Integral(">∫</button>
+            <button class="sym-btn" data-insert="Derivative(">d/dx</button>
+            <button class="sym-btn" data-insert="Curve(">Curve</button>
+            <button class="sym-btn" data-insert="Sequence(">Seq</button>
+        </div>
+        <div class="algebra-nums">
+            <button class="num-btn" data-insert="0">0</button>
+            <button class="num-btn" data-insert="1">1</button>
+            <button class="num-btn" data-insert="2">2</button>
+            <button class="num-btn" data-insert="3">3</button>
+            <button class="num-btn" data-insert="4">4</button>
+            <button class="num-btn" data-insert="5">5</button>
+            <button class="num-btn" data-insert="6">6</button>
+            <button class="num-btn" data-insert="7">7</button>
+            <button class="num-btn" data-insert="8">8</button>
+            <button class="num-btn" data-insert="9">9</button>
+            <button class="num-btn" data-insert=".">.</button>
+            <button class="num-btn" data-insert="-">-</button>
+            <button class="num-btn" data-insert="+">+</button>
+        </div>
+    </div>
+
+    <script src="app.js" defer></script>
+    <script>
+    if ("serviceWorker" in navigator) {
+        window.addEventListener("load", function() {
+            navigator.serviceWorker.register("sw.js").catch(function() {});
+        });
+    }
+    </script>
+</body>
+</html>
