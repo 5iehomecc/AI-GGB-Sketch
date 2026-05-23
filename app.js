@@ -450,6 +450,7 @@
 
       var ggbAppParams = {
         appName: "classic",
+        perspective: "G",
         width: w,
         height: h,
         showToolBar: true,
@@ -700,6 +701,7 @@
       if (key && PLATFORMS[key]) {
         $("base-url").value = PLATFORMS[key].baseUrl;
       }
+      updateModelBadge();
     });
     $("btn-beautify").addEventListener("click", function () { $("beautify-panel").classList.add("open"); $("beautify-overlay").classList.add("open"); });
     $("btn-close-beautify").addEventListener("click", closeBeautifyPanel);
@@ -1422,15 +1424,17 @@
     }
     else if (action === "regenerate") {
       if (isSending) return;
-      messages = messages.slice(0, idx);
-      var lu = messages.slice().reverse().find(function (m) { return m.role === "user"; });
-      if (lu) {
-        var luIdx = messages.indexOf(lu);
-        restoreGGBToMessage(luIdx);
-        messages = messages.slice(0, luIdx + 1);
-        renderMessages();
-        sendToAI(messages);
-      }
+      showConfirmModal("确认重新生成？", "将重新生成该回复，当前回复及之后的对话和图形将被回滚。", function () {
+        messages = messages.slice(0, idx);
+        var lu = messages.slice().reverse().find(function (m) { return m.role === "user"; });
+        if (lu) {
+          var luIdx = messages.indexOf(lu);
+          restoreGGBToMessage(luIdx);
+          messages = messages.slice(0, luIdx + 1);
+          renderMessages();
+          sendToAI(messages);
+        }
+      });
     }
     else if (action === "regenerate-user") {
       if (isSending) return;
@@ -1675,8 +1679,11 @@
   function updateModelBadge() {
     var badge = $("model-badge");
     if (badge && config.model) {
-      badge.textContent = config.model;
-      badge.title = config.model;
+      var platformKey = $("platform-select") ? $("platform-select").value : "";
+      var platformName = platformKey && PLATFORMS[platformKey] ? PLATFORMS[platformKey].name : "";
+      var shortModel = config.model.replace(/^.*\//, "");
+      badge.textContent = platformName ? shortModel + " | " + platformName : shortModel;
+      badge.title = config.model + (platformName ? " | " + platformName : "");
     } else if (badge) {
       badge.textContent = "";
     }
