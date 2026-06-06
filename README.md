@@ -241,6 +241,14 @@ ai-ggb/
 
 ---
 
+## 参考项目
+
+- [AI GGB - 智能几何画板](https://www.chatggb.cn/index.php) - AI 几何画板在线体验站点
+- [GeoGebra AI 对话](https://shu.nat100.top/static/pages/chat/geogebra.html) - GeoGebra AI 对话工具
+- [ai-ggb](https://github.com/pHsl-z/ai-ggb) - AI GGB 开源项目
+
+---
+
 ## 版权信息
 
 **Copyright &copy; 2026 [E家分享](https://www.5iehome.cc)**
