@@ -239,14 +239,9 @@
     model: "",
     apiKey: "",
     systemPrompt: "",
-    useProxy: false,
-    proxyUrl: "",
-    useTools: true,
-    autoExecute: true,
   };
 
   var PLATFORMS = {
-    nvidia: { name: "NVIDIA NIM", baseUrl: "https://integrate.api.nvidia.com/v1" },
     openrouter: { name: "OpenRouter", baseUrl: "https://openrouter.ai/api/v1" },
     iamhc: { name: "新疆幻城网安科技公益大模型", baseUrl: "https://api.iamhc.cn/v1" },
     blazeapi: { name: "BlazeAPI", baseUrl: "https://blazeai.boxu.dev/api/v1" },
@@ -255,114 +250,14 @@
     gemini_local: { name: "Google Gemini (本地)", baseUrl: "http://127.0.0.1:8045/v1" },
   };
 
-  var POIXE_MODELS = [
-    "claude-3-5-haiku-20241022:free",
-    "claude-3-5-sonnet-20240620:free",
-    "claude-3-5-sonnet-20241022:free",
-    "claude-3-7-sonnet-20250219:free",
-    "claude-3-haiku-20240307:free",
-    "claude-sonnet-4-20250514:free",
-    "claude-sonnet-4-5-20250929:free",
-    "deepseek-chat:free",
-    "deepseek-r1:free",
-    "deepseek-r1-250120:free",
-    "deepseek-r1-250528:free",
-    "deepseek-reasoner:free",
-    "deepseek-v3:free",
-    "deepseek-v3-250324:free",
-    "doubao-1-5-lite-32k-250115:free",
-    "doubao-1-5-pro-256k-250115:free",
-    "doubao-1-5-pro-32k-250115:free",
-    "doubao-1-5-pro-32k-character-250228:free",
-    "doubao-1-5-thinking-pro-250415:free",
-    "doubao-1-5-thinking-vision-pro-250428:free",
-    "doubao-1-5-vision-pro-32k-250115:free",
-    "doubao-1.5-vision-lite-250315:free",
-    "doubao-1.5-vision-pro-250328:free",
-    "doubao-seed-1-6-250615:free",
-    "doubao-seed-1-6-flash-250615:free",
-    "doubao-seed-1-6-thinking-250615:free",
-    "gemini-1.5-flash:free",
-    "gemini-1.5-flash-8b:free",
-    "gemini-1.5-pro:free",
-    "gemini-2.0-flash:free",
-    "gemini-2.0-flash-lite:free",
-    "gemini-2.5-flash:free",
-    "gemini-2.5-flash-lite:free",
-    "gemini-2.5-flash-lite-preview-06-17:free",
-    "gemini-2.5-flash-preview-05-20:free",
-    "gemini-2.5-pro:free",
-    "gemini-2.5-pro-preview-03-25:free",
-    "gemini-2.5-pro-preview-05-06:free",
-    "gemini-2.5-pro-preview-06-05:free",
-    "gemini-3-flash-preview:free",
-    "gemini-3-pro-preview:free",
-    "gpt-3.5-turbo:free",
-    "gpt-3.5-turbo-0125:free",
-    "gpt-4.1:free",
-    "gpt-4.1-2025-04-14:free",
-    "gpt-4.1-mini:free",
-    "gpt-4.1-mini-2025-04-14:free",
-    "gpt-4.1-nano:free",
-    "gpt-4.1-nano-2025-04-14:free",
-    "gpt-4o:free",
-    "gpt-4o-2024-08-06:free",
-    "gpt-4o-2024-11-20:free",
-    "gpt-4o-mini:free",
-    "gpt-4o-mini-2024-07-18:free",
-    "gpt-5:free",
-    "gpt-5-2025-08-07:free",
-    "gpt-5-chat-latest:free",
-    "gpt-5-mini:free",
-    "gpt-5-mini-2025-08-07:free",
-    "gpt-5-nano:free",
-    "gpt-5-nano-2025-08-07:free",
-    "gpt-5.1:free",
-    "gpt-5.1-2025-11-13:free",
-    "gpt-5.2:free",
-    "gpt-5.2-2025-12-11:free",
-    "gpt-oss-120b:free",
-    "gpt-oss-20b:free",
-    "grok-3:free",
-    "grok-3-beta:free",
-    "grok-3-mini:free",
-    "grok-3-mini-beta:free",
-    "grok-4:free",
-    "kimi-k2:free",
-    "kimi-k2-0711-preview:free",
-    "claude-haiku-4-5-20251001:free",
-    "o1-mini:free",
-    "o1-mini-2024-09-12:free",
-    "o3-mini:free",
-    "o3-mini-2025-01-31:free",
-    "o4-mini:free",
-    "o4-mini-2025-04-16:free",
-    "qwen-long:free",
-    "qwen-long-2025-01-25:free",
-    "qwen-long-latest:free",
-    "qwen-max:free",
-    "qwen-max-2025-01-25:free",
-    "qwen-max-latest:free",
-    "qwen-plus:free",
-    "qwen-plus-2025-04-28:free",
-    "qwen-plus-latest:free",
-    "qwen-turbo:free",
-    "qwen-turbo-2025-04-28:free",
-    "qwen-turbo-latest:free",
-    "qwen3-0.6b:free",
-    "qwen3-1.7b:free",
-    "qwen3-14b:free",
-    "qwen3-235b-a22b:free",
-    "qwen3-235b-a22b-instruct-2507:free",
-    "qwen3-30b-a3b:free",
-    "qwen3-32b:free",
-    "qwen3-4b:free",
-    "qwen3-8b:free",
-    "qwen3-coder-480b-a35b-instruct:free",
-    "qwq-plus:free",
-    "qwq-plus-2025-03-05:free",
-    "qwq-plus-latest:free",
-  ];
+  var _poixeModels = null;
+  function getPoixeModels() {
+    if (_poixeModels) return _poixeModels;
+    var raw = "claude-3-5-haiku-20241022,claude-3-5-sonnet-20240620,claude-3-5-sonnet-20241022,claude-3-7-sonnet-20250219,claude-3-haiku-20240307,claude-sonnet-4-20250514,claude-sonnet-4-5-20250929,deepseek-chat,deepseek-r1,deepseek-r1-250120,deepseek-r1-250528,deepseek-reasoner,deepseek-v3,deepseek-v3-250324,doubao-1-5-lite-32k-250115,doubao-1-5-pro-256k-250115,doubao-1-5-pro-32k-250115,doubao-1-5-pro-32k-character-250228,doubao-1-5-thinking-pro-250415,doubao-1-5-thinking-vision-pro-250428,doubao-1-5-vision-pro-32k-250115,doubao-1.5-vision-lite-250315,doubao-1.5-vision-pro-250328,doubao-seed-1-6-250615,doubao-seed-1-6-flash-250615,doubao-seed-1-6-thinking-250615,gemini-1.5-flash,gemini-1.5-flash-8b,gemini-1.5-pro,gemini-2.0-flash,gemini-2.0-flash-lite,gemini-2.5-flash,gemini-2.5-flash-lite,gemini-2.5-flash-lite-preview-06-17,gemini-2.5-flash-preview-05-20,gemini-2.5-pro,gemini-2.5-pro-preview-03-25,gemini-2.5-pro-preview-05-06,gemini-2.5-pro-preview-06-05,gemini-3-flash-preview,gemini-3-pro-preview,gpt-3.5-turbo,gpt-3.5-turbo-0125,gpt-4.1,gpt-4.1-2025-04-14,gpt-4.1-mini,gpt-4.1-mini-2025-04-14,gpt-4.1-nano,gpt-4.1-nano-2025-04-14,gpt-4o,gpt-4o-2024-08-06,gpt-4o-2024-11-20,gpt-4o-mini,gpt-4o-mini-2024-07-18,gpt-5,gpt-5-2025-08-07,gpt-5-chat-latest,gpt-5-mini,gpt-5-mini-2025-08-07,gpt-5-nano,gpt-5-nano-2025-08-07,gpt-5.1,gpt-5.1-2025-11-13,gpt-5.2,gpt-5.2-2025-12-11,gpt-oss-120b,gpt-oss-20b,grok-3,grok-3-beta,grok-3-mini,grok-3-mini-beta,grok-4,kimi-k2,kimi-k2-0711-preview,claude-haiku-4-5-20251001,o1-mini,o1-mini-2024-09-12,o3-mini,o3-mini-2025-01-31,o4-mini,o4-mini-2025-04-16,qwen-long,qwen-long-2025-01-25,qwen-long-latest,qwen-max,qwen-max-2025-01-25,qwen-max-latest,qwen-plus,qwen-plus-2025-04-28,qwen-plus-latest,qwen-turbo,qwen-turbo-2025-04-28,qwen-turbo-latest,qwen3-0.6b,qwen3-1.7b,qwen3-14b,qwen3-235b-a22b,qwen3-235b-a22b-instruct-2507,qwen3-30b-a3b,qwen3-32b,qwen3-4b,qwen3-8b,qwen3-coder-480b-a35b-instruct,qwq-plus,qwq-plus-2025-03-05,qwq-plus-latest".split(",");
+    _poixeModels = raw.map(function (m) { return m + ":free"; });
+    return _poixeModels;
+  }
+
   var conversations = [];
   var currentConversationId = null;
   var messages = [];
@@ -376,8 +271,26 @@
   var toolCallRound = 0;
   var MAX_TOOL_ROUNDS = 15;
   var resetCalledInTurn = false;
+  var _saveTimer = null;
+  var _navClickLock = 0;
+  var _serverProxyAvailable = false;
+
+  var PUBLIC_CORS_PROXIES = [
+    "https://corsproxy.io/?",
+    "https://api.allorigins.win/raw?url=",
+  ];
 
   var $ = function (id) { return document.getElementById(id); };
+
+  function debounce(fn, delay) {
+    return function () {
+      var args = arguments, ctx = this;
+      if (_saveTimer) clearTimeout(_saveTimer);
+      _saveTimer = setTimeout(function () { fn.apply(ctx, args); }, delay);
+    };
+  }
+
+  var debouncedSave = debounce(function () { saveConversationImmediate(); }, 500);
 
   document.addEventListener("DOMContentLoaded", function () {
     loadConfig();
@@ -393,6 +306,9 @@
     } else {
       setTimeout(initGeoGebra, 100);
     }
+    fetch("/api/ping", { method: "GET" }).then(function (res) {
+      if (res.ok) _serverProxyAvailable = true;
+    }).catch(function () {});
   });
 
   function initGeoGebra() {
@@ -407,52 +323,28 @@
 
     function onAllCDNFailed() {
       console.error("[GGB] 所有 CDN 均加载失败");
-      if (loadingEl) loadingEl.innerHTML = '<span style="color:var(--red)">GeoGebra 加载失败，请刷新重试</span>';
+      if (loadingEl) loadingEl.innerHTML = '<span style="color:var(--danger)">GeoGebra 加载失败，请刷新重试</span>';
     }
 
     function tryNextCDN() {
-      if (cdnIdx >= CDN_SOURCES.length) {
-        onAllCDNFailed();
-        return;
-      }
+      if (cdnIdx >= CDN_SOURCES.length) { onAllCDNFailed(); return; }
       var src = CDN_SOURCES[cdnIdx];
-      console.log("[GGB] 尝试加载 deployggb.js:", src);
       loadScript(src, function () {
-        if (typeof GGBApplet === "undefined") {
-          console.warn("[GGB] GGBApplet 未定义，尝试下一个 CDN");
-          cdnIdx++;
-          tryNextCDN();
-          return;
-        }
-        console.log("[GGB] deployggb.js 加载成功，GGBApplet 可用");
+        if (typeof GGBApplet === "undefined") { cdnIdx++; tryNextCDN(); return; }
         createApplet(loadingEl);
-      }, function () {
-        console.warn("[GGB] 加载失败:", src);
-        cdnIdx++;
-        tryNextCDN();
-      });
+      }, function () { cdnIdx++; tryNextCDN(); });
     }
 
     function createApplet(loadingEl) {
-      var ggbContainer = document.getElementById("geogebra-container");
-      if (!ggbContainer) {
-        console.error("[GGB] geogebra-container 不存在");
-        return;
-      }
-      var w = ggbContainer.offsetWidth;
-      var h = ggbContainer.offsetHeight;
-      console.log("[GGB] 容器尺寸:", w, "x", h);
-      if (w === 0 || h === 0) {
-        console.warn("[GGB] 容器尺寸为0，延迟重试");
-        setTimeout(function () { createApplet(loadingEl); }, 200);
-        return;
-      }
+      var ggbContainer = $("geogebra-container");
+      if (!ggbContainer) return;
+      var w = ggbContainer.offsetWidth, h = ggbContainer.offsetHeight;
+      if (w === 0 || h === 0) { setTimeout(function () { createApplet(loadingEl); }, 200); return; }
 
       var ggbAppParams = {
         appName: "classic",
         perspective: "G",
-        width: w,
-        height: h,
+        width: w, height: h,
         showToolBar: true,
         showAlgebraInput: false,
         showMenuBar: false,
@@ -461,8 +353,8 @@
         enableRightClick: true,
         enableUndoRedo: true,
         errorDialogsActive: false,
-        showResetIcon: true,
-        allowStyleBar: false,
+        showResetIcon: false,
+        allowStyleBar: true,
         allowResize: true,
         preventFocus: false,
         language: "zh",
@@ -475,33 +367,43 @@
           window.ggbApplet = api;
           window.ggbAppletReady = true;
           if (loadingEl && loadingEl.parentNode) loadingEl.parentNode.removeChild(loadingEl);
-          console.log("[GGB] GeoGebra 就绪, evalCommand:", typeof api.evalCommand, "asyncEvalCommandGetLabels:", typeof api.asyncEvalCommandGetLabels);
           try {
-            var c = document.getElementById("geogebra-container");
+            var c = $("geogebra-container");
             if (c) api.setSize(c.clientWidth, c.clientHeight);
+            function syncGgbAxesGrid() {
+              if (!ggbApp) return;
+              try {
+                if (typeof ggbApp.getGridVisible === "function") {
+                  $("beautify-grid").checked = ggbApp.getGridVisible();
+                }
+              } catch (e) {}
+              try {
+                if (typeof ggbApp.getGraphicsOptions === "function") {
+                  var opts = ggbApp.getGraphicsOptions(1);
+                  if (opts && opts.axes) {
+                    var xVis = opts.axes.x && opts.axes.x.visible;
+                    var yVis = opts.axes.y && opts.axes.y.visible;
+                    $("beautify-axes").checked = !!(xVis || yVis);
+                  }
+                }
+              } catch (e) {}
+            }
             api.registerClientListener(function (event) {
               if (event.type === "select") ggbSelection.push(event.target);
               else if (event.type === "deselect") ggbSelection = ggbSelection.filter(function (l) { return l !== event.target; });
+              else if (event.type === "updateStyle") syncGgbAxesGrid();
             });
-          } catch (e) { console.warn("[GGB] 初始化设置失败:", e); }
+            setInterval(syncGgbAxesGrid, 2000);
+          } catch (e) {}
         },
       };
 
-      console.log("[GGB] 创建 GGBApplet，参数:", JSON.stringify({
-        appName: ggbAppParams.appName,
-        width: ggbAppParams.width,
-        height: ggbAppParams.height,
-        scaleContainerClass: ggbAppParams.scaleContainerClass
-      }));
-
       var app = new GGBApplet(ggbAppParams, true);
       app.inject("geogebra-container");
-      console.log("[GGB] app.inject() 已调用");
 
       loadTimeout = setTimeout(function () {
-        if (!window.ggbAppletReady) {
-          console.error("[GGB] 加载超时（30秒），GeoGebra 可能无法访问");
-          if (loadingEl) loadingEl.innerHTML = '<span style="color:var(--red)">GeoGebra 加载超时，请检查网络或刷新重试</span>';
+        if (!window.ggbAppletReady && loadingEl) {
+          loadingEl.innerHTML = '<span style="color:var(--danger)">GeoGebra 加载超时，请检查网络或刷新重试</span>';
         }
       }, 30000);
     }
@@ -512,37 +414,39 @@
   function loadScript(src, cb, errCb) {
     var s = document.createElement("script");
     s.src = src; s.async = true; s.onload = cb;
-    s.onerror = function () { console.warn("Failed to load:", src); if (errCb) errCb(); };
+    s.onerror = function () { if (errCb) errCb(); };
     document.body.appendChild(s);
+  }
+
+  function executeCommandsSeq(commands, delay, onDone) {
+    var idx = 0;
+    function next() {
+      if (idx >= commands.length) { if (onDone) onDone(); return; }
+      executeGGBCommand(commands[idx++]).then(function () { setTimeout(next, delay); });
+    }
+    next();
   }
 
   function handleToolCall(name, args) {
     if (!ggbApp) return Promise.resolve({ error: "GeoGebra 未就绪，请稍候" });
     if (name === "resetGeoGebra") {
-      if (resetCalledInTurn) {
-        console.warn("[Tool] resetGeoGebra 已在本轮调用过，跳过重复调用");
-        return Promise.resolve({ success: true, note: "画布已在本轮中重置过，无需再次重置" });
-      }
+      if (resetCalledInTurn) return Promise.resolve({ success: true, note: "画布已在本轮中重置过" });
       resetCalledInTurn = true;
     }
     switch (name) {
-      case "getCanvasContext":
-        return Promise.resolve(getCanvasContext());
-      case "executeGeoGebraCommand":
-        return executeGGBCommand(args.command);
+      case "getCanvasContext": return Promise.resolve(getCanvasContext());
+      case "executeGeoGebraCommand": return executeGGBCommand(args.command);
       case "resetGeoGebra":
         try { window.ggbLastCommandError = ""; ggbApp.reset(); ggbSelection = []; return Promise.resolve({ success: true }); }
         catch (e) { return Promise.resolve({ success: false, error: e.message }); }
       case "setPerspective":
         try { ggbApp.setPerspective(args.mode); return Promise.resolve({ success: true }); }
         catch (e) { return Promise.resolve({ success: false, error: e.message }); }
-      case "getSelectedObjects":
-        return Promise.resolve({ selectedObjects: ggbSelection.slice() });
+      case "getSelectedObjects": return Promise.resolve({ selectedObjects: ggbSelection.slice() });
       case "evalLaTeX":
         try { var r = ggbApp.evalLaTeX(args.latex); return Promise.resolve({ success: r }); }
         catch (e) { return Promise.resolve({ success: false, error: e.message }); }
-      default:
-        return Promise.resolve({ error: "未知工具: " + name });
+      default: return Promise.resolve({ error: "未知工具: " + name });
     }
   }
 
@@ -552,8 +456,7 @@
       var xml = ggbApp.getXML();
       var parser = new DOMParser();
       var doc = parser.parseFromString(xml, "text/xml");
-      var elements = [];
-      var cmds = [];
+      var elements = [], cmds = [];
       var construction = doc.querySelector("construction");
       if (construction) {
         var elems = construction.querySelectorAll("element");
@@ -562,6 +465,8 @@
           var obj = { label: el.getAttribute("label"), type: el.getAttribute("type") };
           var coords = el.querySelector("coords");
           if (coords) obj.coords = { x: coords.getAttribute("x"), y: coords.getAttribute("y"), z: coords.getAttribute("z") };
+          var expression = el.querySelector("expression");
+          if (expression && expression.getAttribute("value")) obj.expression = expression.getAttribute("value");
           elements.push(obj);
         }
         var commandEls = construction.querySelectorAll("command");
@@ -576,29 +481,17 @@
         }
       }
       return { elements: elements, commands: cmds, selectedObjects: ggbSelection.slice() };
-    } catch (e) {
-      return { error: "获取画布上下文失败: " + e.message };
-    }
+    } catch (e) { return { error: "获取画布上下文失败: " + e.message }; }
   }
 
   function executeGGBCommand(cmd) {
-    if (!ggbApp) {
-      console.error("[GGB] GeoGebra 未就绪，无法执行:", cmd);
-      return Promise.resolve({ success: false, label: "", error: "GeoGebra 未就绪" });
-    }
-    console.log("[GGB] 执行命令:", cmd);
+    if (!ggbApp) return Promise.resolve({ success: false, label: "", error: "GeoGebra 未就绪" });
     if (typeof ggbApp.asyncEvalCommandGetLabels === "function") {
       return ggbApp.asyncEvalCommandGetLabels(cmd).then(function (label) {
         var lastError = window.ggbLastCommandError || "";
         window.ggbLastCommandError = "";
-        if (lastError === "") {
-          console.log("[GGB] 命令执行成功:", cmd, "label:", label);
-        } else {
-          console.error("[GGB] 命令执行失败:", cmd, "错误:", lastError);
-        }
         return { success: lastError === "", label: label || "", error: lastError };
       }).catch(function (e) {
-        console.error("[GGB] asyncEvalCommandGetLabels 异常:", cmd, e);
         return { success: false, label: "", error: e.message || String(e) };
       });
     }
@@ -611,56 +504,39 @@
         }
         var lastError = window.ggbLastCommandError || "";
         window.ggbLastCommandError = "";
-        console.log("[GGB] evalCommand 返回:", result, "label:", label, "error:", lastError);
         resolve({ success: !!result && lastError === "", label: label, error: lastError || (result ? "" : "命令执行失败") });
       } catch (e) {
-        console.error("[GGB] 命令执行异常:", cmd, e);
         resolve({ success: false, label: "", error: e.message || String(e) });
       }
     });
   }
 
   function executeGGBScript(scriptText) {
-    if (!ggbApp || !config.autoExecute) return;
-    var lines = scriptText.split("\n");
-    var commands = [];
-    for (var i = 0; i < lines.length; i++) {
-      var line = lines[i].trim();
-      if (!line || line.startsWith("//") || line.startsWith("#")) continue;
-      commands.push(line);
-    }
-    if (commands.length === 0) return;
-    var idx = 0;
-    function execNext() {
-      if (idx >= commands.length) return;
-      var cmd = commands[idx++];
-      executeGGBCommand(cmd).then(function () { setTimeout(execNext, 150); });
-    }
-    execNext();
+    if (!ggbApp) return;
+    var commands = scriptText.split("\n").map(function (l) { return l.trim(); }).filter(function (l) {
+      return l && !l.startsWith("//") && !l.startsWith("#");
+    });
+    if (commands.length > 0) executeCommandsSeq(commands, 150);
   }
 
   function extractGGBScripts(content) {
     var scripts = [];
     var codeBlockRegex = /```(?:geogebra|ggb|ggbcript)?\s*\n([\s\S]*?)```/gi;
     var match;
-    while ((match = codeBlockRegex.exec(content)) !== null) {
-      scripts.push(match[1].trim());
-    }
+    while ((match = codeBlockRegex.exec(content)) !== null) scripts.push(match[1].trim());
     if (scripts.length === 0) {
       var genericBlockRegex = /```\s*\n([\s\S]*?)```/gi;
       while ((match = genericBlockRegex.exec(content)) !== null) {
         var block = match[1].trim();
-        if (looksLikeGGBScript(block)) {
-          scripts.push(block);
-        }
+        if (looksLikeGGBScript(block)) scripts.push(block);
       }
     }
     return scripts;
   }
 
   function looksLikeGGBScript(text) {
-    var lines = text.split("\n");
     var ggbLines = 0;
+    var lines = text.split("\n");
     for (var i = 0; i < lines.length; i++) {
       var line = lines[i].trim();
       if (!line || line.startsWith("//") || line.startsWith("#")) continue;
@@ -671,6 +547,7 @@
   }
 
   function bindEvents() {
+    document.querySelector("#version-link").addEventListener("click", showChangelog);
     $("chat-form").addEventListener("submit", function (e) { e.preventDefault(); });
     $("send-btn").addEventListener("click", handleSend);
     $("stop-btn").addEventListener("click", handleStop);
@@ -686,114 +563,255 @@
       var input = $("api-key");
       var eyeOff = this.querySelector(".eye-off");
       var eyeOn = this.querySelector(".eye-on");
-      if (input.type === "password") {
-        input.type = "text";
-        eyeOff.style.display = "none";
-        eyeOn.style.display = "";
-      } else {
-        input.type = "password";
-        eyeOff.style.display = "";
-        eyeOn.style.display = "none";
-      }
+      var show = input.type === "password";
+      input.type = show ? "text" : "password";
+      eyeOff.style.display = show ? "none" : "";
+      eyeOn.style.display = show ? "" : "none";
     });
     $("platform-select").addEventListener("change", function () {
       var key = this.value;
-      if (key && PLATFORMS[key]) {
-        $("base-url").value = PLATFORMS[key].baseUrl;
-      }
+      if (key && PLATFORMS[key]) $("base-url").value = PLATFORMS[key].baseUrl;
       updateModelBadge();
     });
     $("btn-beautify").addEventListener("click", function () { $("beautify-panel").classList.add("open"); $("beautify-overlay").classList.add("open"); });
     $("btn-close-beautify").addEventListener("click", closeBeautifyPanel);
     $("beautify-overlay").addEventListener("click", closeBeautifyPanel);
-    $("btn-export-ggb").addEventListener("click", exportGGB);
-    $("btn-import-ggb").addEventListener("click", function () { $("import-file-input").click(); });
+    $("btn-reset-canvas").addEventListener("click", function () {
+      if (!ggbApp) { showToast("GeoGebra 未就绪"); return; }
+      showConfirmModal("确认重置画板？", "将清除画板上的所有对象，此操作不可撤消。", function () {
+        try { ggbApp.newConstruction(); ggbSelection = []; showToast("画板已重置"); }
+        catch (e) { showToast("重置失败: " + e.message); }
+      });
+    });
+    $("btn-io").addEventListener("click", function (e) {
+      e.stopPropagation();
+      $("perspective-dropdown").classList.remove("open");
+      $("io-dropdown").classList.toggle("open");
+    });
+    $("io-menu").addEventListener("click", function (e) {
+      var item = e.target.closest(".dropdown-item");
+      if (!item) return;
+      e.stopPropagation();
+      var action = item.getAttribute("data-action");
+      if (action === "import-ggb") { $("import-file-input").click(); }
+      else if (action === "export-ggb") { exportGGB(); }
+      else if (action === "export-script") { exportScript(); }
+      $("io-dropdown").classList.remove("open");
+    });
     $("import-file-input").addEventListener("change", function (e) {
       if (!e.target.files || !e.target.files[0] || !ggbApp) return;
       var file = e.target.files[0];
-      var reader = new FileReader();
-      reader.onload = function (ev) {
-        try { ggbApp.setXML(ev.target.result); showToast("已导入: " + file.name); }
-        catch (err) { showToast("导入失败: " + err.message); }
-      };
-      reader.readAsText(file);
+      var fileName = file.name.toLowerCase();
+      if (fileName.endsWith(".ggb")) {
+        var reader = new FileReader();
+        reader.onload = function (ev) {
+          try {
+            var dataUrl = ev.target.result;
+            var base64 = dataUrl.split(",")[1];
+            if (!base64) { showToast("文件格式错误"); return; }
+            ggbApp.setBase64(base64);
+            showToast("已导入: " + file.name);
+          } catch (err) { showToast("导入失败: " + err.message); }
+        };
+        reader.readAsDataURL(file);
+      } else {
+        var reader = new FileReader();
+        reader.onload = function (ev) {
+          try { ggbApp.setXML(ev.target.result); showToast("已导入: " + file.name); }
+          catch (err) { showToast("导入失败: " + err.message); }
+        };
+        reader.readAsText(file);
+      }
       e.target.value = "";
     });
-    $("model-select").addEventListener("change", function () {
-      if (this.value) {
-        config.model = this.value;
-        updateModelBadge();
+    (function(){
+      var input = $("model-input");
+      var dropdown = $("model-dropdown");
+      var hidden = $("model-select");
+      var allModels = [];
+      var highlightIdx = -1;
+      function positionDropdown() {
+        var rect = input.getBoundingClientRect();
+        dropdown.style.left = rect.left + "px";
+        dropdown.style.width = rect.width + "px";
+        var spaceBelow = window.innerHeight - rect.bottom - 4;
+        var spaceAbove = rect.top - 4;
+        if (spaceBelow < 200 && spaceAbove > spaceBelow) {
+          dropdown.style.top = "";
+          dropdown.style.bottom = (window.innerHeight - rect.top + 2) + "px";
+          dropdown.style.maxHeight = Math.min(150, spaceAbove) + "px";
+        } else {
+          dropdown.style.bottom = "";
+          dropdown.style.top = (rect.bottom + 2) + "px";
+          dropdown.style.maxHeight = Math.min(150, spaceBelow) + "px";
+        }
       }
-    });
+      function renderOptions(filter) {
+        dropdown.innerHTML = "";
+        highlightIdx = -1;
+        var f = (filter || "").toLowerCase();
+        var filtered = allModels.filter(function(m){ return !f || m.toLowerCase().indexOf(f) >= 0; });
+        if (filtered.length === 0) {
+          dropdown.innerHTML = '<div class="combo-empty">无匹配模型</div>';
+          return;
+        }
+        filtered.forEach(function(m){
+          var div = document.createElement("div");
+          div.className = "combo-option";
+          div.textContent = m;
+          div.setAttribute("data-value", m);
+          if (m === hidden.value) div.classList.add("selected");
+          dropdown.appendChild(div);
+        });
+      }
+      function selectModel(val) {
+        hidden.value = val;
+        input.value = val;
+        config.model = val;
+        updateModelBadge();
+        dropdown.classList.remove("open");
+      }
+      function openDropdown(filter) {
+        renderOptions(filter !== undefined ? filter : "");
+        positionDropdown();
+        dropdown.classList.add("open");
+      }
+      input.addEventListener("focus", function() {
+        openDropdown("");
+        input.select();
+      });
+      input.addEventListener("input", function() {
+        openDropdown(input.value);
+      });
+      input.addEventListener("keydown", function(e) {
+        var items = dropdown.querySelectorAll(".combo-option");
+        if (!items.length) return;
+        if (e.key === "ArrowDown") {
+          e.preventDefault();
+          highlightIdx = Math.min(highlightIdx + 1, items.length - 1);
+          items.forEach(function(el,i){ el.classList.toggle("highlighted", i === highlightIdx); });
+          if (items[highlightIdx]) items[highlightIdx].scrollIntoView({block:"nearest"});
+        } else if (e.key === "ArrowUp") {
+          e.preventDefault();
+          highlightIdx = Math.max(highlightIdx - 1, 0);
+          items.forEach(function(el,i){ el.classList.toggle("highlighted", i === highlightIdx); });
+          if (items[highlightIdx]) items[highlightIdx].scrollIntoView({block:"nearest"});
+        } else if (e.key === "Enter") {
+          e.preventDefault();
+          if (highlightIdx >= 0 && items[highlightIdx]) {
+            selectModel(items[highlightIdx].getAttribute("data-value"));
+          } else if (input.value.trim()) {
+            selectModel(input.value.trim());
+          }
+        } else if (e.key === "Escape") {
+          dropdown.classList.remove("open");
+        }
+      });
+      dropdown.addEventListener("click", function(e) {
+        var opt = e.target.closest(".combo-option");
+        if (opt) selectModel(opt.getAttribute("data-value"));
+      });
+      window.addEventListener("resize", function() {
+        if (dropdown.classList.contains("open")) positionDropdown();
+      });
+      var _modalContent = document.querySelector("#config-modal .modal-content");
+      if (_modalContent) {
+        _modalContent.addEventListener("scroll", function() {
+          if (dropdown.classList.contains("open")) positionDropdown();
+        });
+      }
+      window._setComboModels = function(models) {
+        allModels = models.slice();
+        if (hidden.value && allModels.indexOf(hidden.value) < 0) {
+          allModels.push(hidden.value);
+          allModels.sort();
+        }
+        openDropdown();
+      };
+      window._setComboValue = function(val) {
+        hidden.value = val;
+        input.value = val;
+      };
+    })();
+
     $("btn-perspective").addEventListener("click", function (e) {
       e.stopPropagation();
+      $("io-dropdown").classList.remove("open");
       $("perspective-dropdown").classList.toggle("open");
     });
-    document.addEventListener("click", function () {
+    document.addEventListener("click", function (e) {
+      $("perspective-dropdown").classList.remove("open");
+      $("io-dropdown").classList.remove("open");
+      var modelDropdown = $("model-dropdown");
+      if (modelDropdown && !e.target.closest("#model-combo")) modelDropdown.classList.remove("open");
+    });
+    $("perspective-menu").addEventListener("click", function (e) {
+      var item = e.target.closest(".dropdown-item");
+      if (!item) return;
+      e.stopPropagation();
+      var mode = item.getAttribute("data-mode");
+      var label = item.textContent.trim();
+      if (ggbApp) { ggbApp.setPerspective(mode); showToast("已切换视图"); }
+      $("perspective-label").textContent = label.replace(/^[^\s]+\s/, "");
+      var items = this.querySelectorAll(".dropdown-item");
+      for (var i = 0; i < items.length; i++) items[i].classList.remove("active");
+      item.classList.add("active");
       $("perspective-dropdown").classList.remove("open");
     });
-    var perspectiveItems = document.querySelectorAll("#perspective-menu .dropdown-item");
-    for (var pi = 0; pi < perspectiveItems.length; pi++) {
-      perspectiveItems[pi].addEventListener("click", function (e) {
-        e.stopPropagation();
-        var mode = this.getAttribute("data-mode");
-        var label = this.textContent.trim();
-        if (ggbApp) { ggbApp.setPerspective(mode); showToast("已切换视图"); }
-        $("perspective-label").textContent = label.replace(/^[^\s]+\s/, "");
-        perspectiveItems.forEach(function (item) { item.classList.remove("active"); });
-        this.classList.add("active");
-        $("perspective-dropdown").classList.remove("open");
-      });
-    }
-    var beautifyColorBtns = document.querySelectorAll(".beautify-color-btn");
-    for (var bi = 0; bi < beautifyColorBtns.length; bi++) {
-      beautifyColorBtns[bi].addEventListener("click", function () {
-        var cmd = this.getAttribute("data-cmd");
+
+    $("beautify-panel").addEventListener("click", function (e) {
+      var colorBtn = e.target.closest(".beautify-color-btn");
+      if (colorBtn) {
+        var cmd = colorBtn.getAttribute("data-cmd");
         if (!cmd || !ggbApp) return;
-        var cmds = cmd.split("&");
-        var idx = 0;
-        function execNext() {
-          if (idx >= cmds.length) { showToast("美化命令已执行"); return; }
-          var c = cmds[idx++].trim();
-          executeGGBCommand(c).then(function () { setTimeout(execNext, 100); });
-        }
-        execNext();
-      });
-    }
+        var cmds = cmd.split("&").map(function (c) { return c.trim(); });
+        executeCommandsSeq(cmds, 100, function () { showToast("美化命令已执行"); });
+        return;
+      }
+      var presetBtn = e.target.closest(".beautify-preset-btn");
+      if (presetBtn) {
+        var preset = presetBtn.getAttribute("data-preset");
+        if (!preset || !ggbApp) return;
+        var PRESETS = {
+          light: ["SetBackgroundColor(1,1,1)","ShowAxes(true)","SetColor(xAxis,0,0,0)","SetColor(yAxis,0,0,0)","ShowGrid(true)","SetGridColor(0.85,0.85,0.85)"],
+          warm: ["SetBackgroundColor(1,0.98,0.9)","ShowAxes(true)","SetColor(xAxis,0.4,0.25,0.1)","SetColor(yAxis,0.4,0.25,0.1)","ShowGrid(true)","SetGridColor(0.9,0.85,0.75)"]
+        };
+        var PRESET_UI = {
+          light: { axes: true, grid: true, pointSize: 3, lineThickness: 2, labels: true },
+          warm: { axes: true, grid: true, pointSize: 4, lineThickness: 3, labels: true }
+        };
+        var cmds = PRESETS[preset];
+        if (!cmds) return;
+        var NAMES = {light:"浅色经典",warm:"暖色教学"};
+        var name = NAMES[preset] || preset;
+        executeCommandsSeq(cmds, 100, function () {
+          var ui = PRESET_UI[preset];
+          if (ui) {
+            $("beautify-axes").checked = ui.axes;
+            $("beautify-grid").checked = ui.grid;
+            $("beautify-point-size").value = ui.pointSize;
+            $("beautify-point-size-val").textContent = ui.pointSize;
+            $("beautify-line-thickness").value = ui.lineThickness;
+            $("beautify-line-thickness-val").textContent = ui.lineThickness;
+            $("beautify-labels").checked = ui.labels;
+          }
+          showToast("已应用" + name + "方案");
+        });
+      }
+    });
+
     $("beautify-axes").addEventListener("change", function () {
       if (ggbApp) executeGGBCommand("ShowAxes(" + this.checked + ")");
     });
     $("beautify-grid").addEventListener("change", function () {
       if (ggbApp) executeGGBCommand("ShowGrid(" + this.checked + ")");
     });
-    $("btn-close-algebra").addEventListener("click", function () {
-      $("algebra-panel").style.display = "none";
-      $("beautify-algebra").checked = false;
-    });
-    var symBtns = document.querySelectorAll(".sym-btn, .num-btn");
-    for (var s = 0; s < symBtns.length; s++) {
-      symBtns[s].addEventListener("click", function () {
-        var val = this.getAttribute("data-insert");
-        var input = $("chat-input");
-        if (!input) return;
-        var start = input.selectionStart;
-        var end = input.selectionEnd;
-        var text = input.value;
-        input.value = text.substring(0, start) + val + text.substring(end);
-        input.selectionStart = input.selectionEnd = start + val.length;
-        input.focus();
-      });
-    }
     $("beautify-labels").addEventListener("change", function () {
       if (!ggbApp) return;
       var allObj = ggbApp.getAllObjectNames ? ggbApp.getAllObjectNames() : [];
-      var labels = [];
       for (var k = 0; k < allObj.length; k++) {
         var t = ggbApp.getObjectType(allObj[k]);
-        if (t === "point" || t === "text") labels.push(allObj[k]);
-      }
-      for (var m = 0; m < labels.length; m++) {
-        executeGGBCommand("ShowLabel(" + labels[m] + ", " + this.checked + ")");
+        if (t === "point" || t === "text") executeGGBCommand("ShowLabel(" + allObj[k] + ", " + this.checked + ")");
       }
     });
     $("beautify-point-size").addEventListener("input", function () {
@@ -801,9 +819,7 @@
       if (!ggbApp) return;
       var allObj = ggbApp.getAllObjectNames ? ggbApp.getAllObjectNames() : [];
       for (var k = 0; k < allObj.length; k++) {
-        if (ggbApp.getObjectType(allObj[k]) === "point") {
-          executeGGBCommand("SetPointSize(" + allObj[k] + ", " + this.value + ")");
-        }
+        if (ggbApp.getObjectType(allObj[k]) === "point") executeGGBCommand("SetPointSize(" + allObj[k] + ", " + this.value + ")");
       }
     });
     $("beautify-line-thickness").addEventListener("input", function () {
@@ -812,53 +828,21 @@
       var allObj = ggbApp.getAllObjectNames ? ggbApp.getAllObjectNames() : [];
       for (var k = 0; k < allObj.length; k++) {
         var t = ggbApp.getObjectType(allObj[k]);
-        if (t === "segment" || t === "line" || t === "ray" || t === "circle" || t === "conic" || t === "polygon" || t === "function") {
+        if (t === "segment" || t === "line" || t === "ray" || t === "circle" || t === "conic" || t === "polygon" || t === "function")
           executeGGBCommand("SetLineThickness(" + allObj[k] + ", " + this.value + ")");
-        }
       }
     });
-    var BEAUTIFY_PRESETS = {
-      light: [
-        "SetBackgroundColor(1,1,1)",
-        "ShowAxes(true)",
-        "SetColor(xAxis, 0, 0, 0)",
-        "SetColor(yAxis, 0, 0, 0)",
-        "ShowGrid(true)",
-        "SetGridColor(0.85, 0.85, 0.85)",
-      ],
-      warm: [
-        "SetBackgroundColor(1, 0.98, 0.9)",
-        "ShowAxes(true)",
-        "SetColor(xAxis, 0.4, 0.25, 0.1)",
-        "SetColor(yAxis, 0.4, 0.25, 0.1)",
-        "ShowGrid(true)",
-        "SetGridColor(0.9, 0.85, 0.75)",
-      ],
-    };
-    var presetBtns = document.querySelectorAll(".beautify-preset-btn");
-    for (var ji = 0; ji < presetBtns.length; ji++) {
-      presetBtns[ji].addEventListener("click", function () {
-        var preset = this.getAttribute("data-preset");
-        if (!preset || !BEAUTIFY_PRESETS[preset] || !ggbApp) return;
-        var cmds = BEAUTIFY_PRESETS[preset];
-        var idx = 0;
-        function execNext() {
-          if (idx >= cmds.length) { showToast("已应用" + (preset === "light" ? "浅色经典" : preset === "dark" ? "深色护眼" : preset === "blueprint" ? "蓝图风格" : "暖色教学") + "方案"); return; }
-          executeGGBCommand(cmds[idx++]).then(function () { setTimeout(execNext, 100); });
-        }
-        execNext();
-      });
-    }
+
     var chatInput = $("chat-input");
     chatInput.addEventListener("input", function () {
       this.style.height = "auto";
       this.style.height = Math.min(this.scrollHeight, 120) + "px";
     });
     chatInput.addEventListener("keydown", function (e) {
-      if (e.key === "Enter" && !e.shiftKey) {
-        e.preventDefault();
-        handleSend(e);
-      }
+      if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); handleSend(e); }
+    });
+    $("messages-list").addEventListener("scroll", function () {
+      requestAnimationFrame(updateConvNavActive);
     });
     initImageUpload();
   }
@@ -868,12 +852,11 @@
     var fileInput = $("file-input");
     var preview = $("input-preview");
     var previewImg = $("preview-img");
-    var removeBtn = $("preview-remove");
     uploadBtn.addEventListener("click", function () { fileInput.click(); });
     fileInput.addEventListener("change", function (e) {
       if (e.target.files && e.target.files[0]) handleImageFile(e.target.files[0]);
     });
-    removeBtn.addEventListener("click", function (e) {
+    $("preview-remove").addEventListener("click", function (e) {
       e.stopPropagation();
       uploadedImage = null;
       uploadedThumbnail = null;
@@ -886,50 +869,56 @@
       var items = e.clipboardData && e.clipboardData.items;
       if (!items) return;
       for (var i = 0; i < items.length; i++) {
-        if (items[i].type.indexOf("image") !== -1) {
-          e.preventDefault();
-          handleImageFile(items[i].getAsFile());
-          return;
-        }
+        if (items[i].type.indexOf("image") !== -1) { e.preventDefault(); handleImageFile(items[i].getAsFile()); return; }
       }
     });
     var rightPanel = $("right-panel");
     rightPanel.addEventListener("dragover", function (e) { e.preventDefault(); });
     rightPanel.addEventListener("drop", function (e) {
       e.preventDefault();
-      if (e.dataTransfer.files && e.dataTransfer.files[0]) {
-        if (e.dataTransfer.files[0].type.indexOf("image") !== -1) {
-          handleImageFile(e.dataTransfer.files[0]);
-        }
-      }
+      if (e.dataTransfer.files && e.dataTransfer.files[0] && e.dataTransfer.files[0].type.indexOf("image") !== -1)
+        handleImageFile(e.dataTransfer.files[0]);
     });
   }
 
   function handleImageFile(file) {
     if (!file || file.type.indexOf("image") === -1) return;
-    var fileSizeKB = Math.round(file.size / 1024);
-    var fileName = file.name || "图片";
     compressImage(file, 1600, 0.85, function (compressedDataUrl) {
       uploadedImage = compressedDataUrl;
       $("preview-img").src = compressedDataUrl;
       $("input-preview").style.display = "";
       $("btn-upload").classList.add("has-image");
-      generateThumbnail(compressedDataUrl, 200, function (thumb) {
-        uploadedThumbnail = thumb;
-      });
+      generateThumbnail(compressedDataUrl, 200, function (thumb) { uploadedThumbnail = thumb; });
     });
+  }
+
+  function downloadBlob(blob, filename) {
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement("a");
+    a.href = url; a.download = filename;
+    document.body.appendChild(a); a.click(); document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  }
+
+  function getTimestampName() {
+    return "geogebra_" + new Date().toISOString().replace(/[-:]/g, "").replace("T", "_").slice(0, 15);
+  }
+
+  function resizeCanvas(img, maxDim, callback) {
+    var scale = Math.min(maxDim / img.width, maxDim / img.height, 1);
+    var canvas = document.createElement("canvas");
+    canvas.width = Math.round(img.width * scale);
+    canvas.height = Math.round(img.height * scale);
+    canvas.getContext("2d").drawImage(img, 0, 0, canvas.width, canvas.height);
+    callback(canvas);
   }
 
   function generateThumbnail(dataUrl, maxDim, callback) {
     var img = new Image();
     img.onload = function () {
-      var w = img.width, h = img.height;
-      var scale = Math.min(maxDim / w, maxDim / h, 1);
-      var canvas = document.createElement("canvas");
-      canvas.width = Math.round(w * scale);
-      canvas.height = Math.round(h * scale);
-      canvas.getContext("2d").drawImage(img, 0, 0, canvas.width, canvas.height);
-      callback(canvas.toDataURL("image/jpeg", 0.6));
+      resizeCanvas(img, maxDim, function (canvas) {
+        callback(canvas.toDataURL("image/jpeg", 0.6));
+      });
     };
     img.src = dataUrl;
   }
@@ -939,18 +928,10 @@
     reader.onload = function (e) {
       var img = new Image();
       img.onload = function () {
-        var w = img.width, h = img.height;
-        if (w <= maxDim && h <= maxDim && file.size < 500 * 1024) {
-          callback(e.target.result);
-          return;
-        }
-        var scale = 1;
-        if (w > maxDim || h > maxDim) scale = Math.min(maxDim / w, maxDim / h);
-        var canvas = document.createElement("canvas");
-        canvas.width = Math.round(w * scale);
-        canvas.height = Math.round(h * scale);
-        canvas.getContext("2d").drawImage(img, 0, 0, canvas.width, canvas.height);
-        callback(canvas.toDataURL("image/jpeg", quality));
+        if (img.width <= maxDim && img.height <= maxDim && file.size < 500 * 1024) { callback(e.target.result); return; }
+        resizeCanvas(img, maxDim, function (canvas) {
+          callback(canvas.toDataURL("image/jpeg", quality));
+        });
       };
       img.src = e.target.result;
     };
@@ -969,22 +950,26 @@
     var dot = $("conn-dot"); dot.className = "conn-dot";
     if (connStatus === "connected") { dot.classList.add("connected"); dot.title = "已连接"; }
     else if (connStatus === "connecting") { dot.classList.add("connecting"); dot.title = "连接中…"; }
-    else if (connStatus === "error") { dot.classList.add("error"); dot.title = "连接错误"; }
+    else if (connStatus === "error") { dot.title = "连接错误"; }
     else { dot.title = "未连接"; }
   }
 
   function loadConfig() {
-    try { var s = localStorage.getItem("ai-ggb-config"); if (s) { var saved = JSON.parse(s); for (var k in saved) { if (saved.hasOwnProperty(k)) config[k] = saved[k]; } } } catch (e) {}
+    try {
+      var s = localStorage.getItem("ai-ggb-config");
+      if (s) {
+        var saved = JSON.parse(s);
+        for (var k in saved) {
+          if (saved.hasOwnProperty(k) && config.hasOwnProperty(k)) config[k] = saved[k];
+        }
+      }
+    } catch (e) {}
   }
   function saveConfig() {
     config.baseUrl = $("base-url").value.trim();
-    config.model = $("model-select").value;
+    config.model = $("model-select").value || $("model-input").value.trim();
     config.apiKey = $("api-key").value;
     config.systemPrompt = $("system-prompt").value;
-    config.useProxy = $("use-proxy").checked;
-    config.proxyUrl = $("proxy-url").value.trim();
-    config.useTools = $("use-tools").checked;
-    config.autoExecute = $("auto-execute").checked;
     localStorage.setItem("ai-ggb-config", JSON.stringify(config));
     $("config-modal").classList.remove("open");
     updateModelBadge();
@@ -994,30 +979,13 @@
     $("base-url").value = config.baseUrl;
     $("api-key").value = config.apiKey;
     $("system-prompt").value = config.systemPrompt;
-    $("use-proxy").checked = config.useProxy;
-    $("proxy-url").value = config.proxyUrl;
-    $("use-tools").checked = config.useTools;
-    $("auto-execute").checked = config.autoExecute;
     var platformSelect = $("platform-select");
     var matched = false;
     for (var key in PLATFORMS) {
-      if (PLATFORMS.hasOwnProperty(key) && PLATFORMS[key].baseUrl === config.baseUrl) {
-        platformSelect.value = key;
-        matched = true;
-        break;
-      }
+      if (PLATFORMS.hasOwnProperty(key) && PLATFORMS[key].baseUrl === config.baseUrl) { platformSelect.value = key; matched = true; break; }
     }
     if (!matched) platformSelect.value = "";
-    var select = $("model-select");
-    var found = false;
-    for (var i = 0; i < select.options.length; i++) {
-      if (select.options[i].value === config.model) {
-        select.selectedIndex = i;
-        found = true;
-        break;
-      }
-    }
-    if (!found) select.selectedIndex = 0;
+    if (window._setComboValue) window._setComboValue(config.model || "");
     updateModelBadge();
   }
 
@@ -1028,9 +996,7 @@
     if (!content && !uploadedImage) return;
     if (!config.apiKey || !config.baseUrl) { $("config-modal").classList.add("open"); showToast("请先配置 API 地址和 Key"); return; }
     var image = uploadedImage;
-    if (image && !content) {
-      content = "请分析这张几何题目图片，识别其中的几何元素或者文字描述，然后在画板上绘制出对应的图形。";
-    }
+    if (image && !content) content = "请分析这张几何题目图片，识别其中的几何元素或者文字描述，然后在画板上绘制出对应的图形。";
     input.value = "";
     input.style.height = "auto";
     sendUserMessage(content, image);
@@ -1045,13 +1011,11 @@
   }
 
   function updateSendingUI(sending) {
-    var sendBtn = $("send-btn");
-    var stopBtn = $("stop-btn");
+    var sendBtn = $("send-btn"), stopBtn = $("stop-btn");
     if (sending) {
       sendBtn.style.display = "none";
       stopBtn.style.display = "";
       stopBtn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="animation:spin 1s linear infinite"><path d="M12 2v4"/><path d="M12 18v4"/><path d="M4.93 4.93l2.83 2.83"/><path d="M16.24 16.24l2.83 2.83"/><path d="M2 12h4"/><path d="M18 12h4"/><path d="M4.93 19.07l2.83-2.83"/><path d="M16.24 7.76l2.83-2.83"/></svg>';
-      stopBtn.title = "停止生成";
     } else {
       sendBtn.style.display = "";
       stopBtn.style.display = "none";
@@ -1061,10 +1025,7 @@
 
   function sendUserMessage(content, image) {
     var userMsg = { id: "m" + Date.now(), role: "user", content: content || "请分析这张图片" };
-    if (image) {
-      userMsg.image = image;
-      userMsg.thumbnail = uploadedThumbnail || image;
-    }
+    if (image) { userMsg.image = image; userMsg.thumbnail = uploadedThumbnail || image; }
     userMsg.ggbState = captureGGBState();
     messages.push(userMsg);
     uploadedImage = null;
@@ -1092,9 +1053,7 @@
               { type: "image_url", image_url: { url: m.image } }
             ]
           });
-        } else {
-          apiMessages.push({ role: "user", content: m.content });
-        }
+        } else { apiMessages.push({ role: "user", content: m.content }); }
       } else if (m.role === "assistant") {
         if (!m.content && !m.tool_calls) continue;
         apiMessages.push({ role: "assistant", content: m.content || "" });
@@ -1108,9 +1067,6 @@
   function getApiUrl() {
     var baseUrl = config.baseUrl;
     if (!baseUrl) return "";
-    if (config.useProxy && config.proxyUrl) {
-      baseUrl = config.proxyUrl + "/" + baseUrl.replace(/^https?:\/\//, "");
-    }
     return baseUrl + "/chat/completions";
   }
 
@@ -1123,115 +1079,104 @@
     updateSendingUI(true);
 
     var apiMessages = buildApiMessages(msgHistory);
-
     var assistantMsg = { id: "m" + Date.now(), role: "assistant", content: "⏳ 思考中..." };
     messages.push(assistantMsg);
     renderMessages();
 
-    var requestBody = {
-      model: config.model,
-      messages: apiMessages,
-      stream: false,
-    };
-    if (config.useTools) {
-      requestBody.tools = GGB_TOOLS;
-      requestBody.tool_choice = "auto";
-    }
+    var _useTools = true;
+    var requestBody = { model: config.model, messages: apiMessages, stream: false };
+    requestBody.tools = GGB_TOOLS;
+    requestBody.tool_choice = "auto";
 
     var url = getApiUrl();
     var headers = { "Content-Type": "application/json", "Authorization": "Bearer " + config.apiKey };
 
-    console.log("[AI] 发送请求到:", url, "模型:", config.model, "GeoGebra就绪:", !!ggbApp, "使用工具:", config.useTools);
-
-    fetch(url, { method: "POST", headers: headers, body: JSON.stringify(requestBody), signal: abortController.signal })
-      .then(function (res) {
-        console.log("[AI] 响应状态:", res.status);
-        if (!res.ok) return res.text().then(function (t) {
-          if (config.useTools && (t.indexOf("tool") >= 0 || t.indexOf("function") >= 0)) {
-            console.warn("[AI] 工具调用可能不支持，自动重试...");
-            config.useTools = false;
-            localStorage.setItem("ai-ggb-config", JSON.stringify(config));
-            var retryBody = { model: config.model, messages: apiMessages, stream: false };
-            return fetch(url, { method: "POST", headers: headers, body: JSON.stringify(retryBody), signal: abortController.signal })
-              .then(function (r2) { if (!r2.ok) return r2.text().then(function (t2) { throw new Error(r2.status + " " + t2); }); return r2.json(); });
-          }
-          throw new Error(res.status + " " + t);
-        });
-        return res.json();
-      })
-      .then(function (data) {
-        setConnStatus("connected");
-        var choice = data.choices && data.choices[0];
-        if (!choice) throw new Error("无响应");
-
-        var msg = choice.message;
-        console.log("[AI] 响应内容:", msg.content ? msg.content.slice(0, 100) : "(无文本)");
-        console.log("[AI] 工具调用:", msg.tool_calls ? msg.tool_calls.length + " 个" : "无");
-
-        if (msg.content && (msg.content.indexOf("does not exist") >= 0 || msg.content.indexOf("doesn't exist") >= 0 || msg.content.indexOf("image_gen") >= 0 || msg.content.indexOf("image_edit") >= 0)) {
-          console.warn("[AI] 模型幻觉了不存在的工具，可能不支持 function calling");
-          if (config.useTools) {
-            config.useTools = false;
-            localStorage.setItem("ai-ggb-config", JSON.stringify(config));
-            assistantMsg.content = "⏳ 检测到模型不支持函数调用，正在以代码块模式重试...";
-            renderMessages();
-            return sendToAI(msgHistory);
-          }
-        }
-
-        assistantMsg.content = msg.content || "";
-
-        if (msg.tool_calls && msg.tool_calls.length > 0) {
-          return processToolCalls(msg.tool_calls, assistantMsg, msgHistory, apiMessages, msg);
-        }
-
-        if (config.autoExecute) {
-          var ggbScripts = extractGGBScripts(msg.content || "");
-          if (ggbScripts.length > 0) {
-            console.log("[GGB Script] 提取到 " + ggbScripts.length + " 个脚本块，开始执行");
-            executeGGBScript(ggbScripts.join("\n"));
-          }
-        }
-        renderMessages();
-        saveConversation();
-        isSending = false;
-        updateSendingUI(false);
-      })
-      .catch(function (err) {
-        console.error("[AI] 请求失败:", err);
-        if (err.name === "AbortError") { setConnStatus("disconnected"); }
-        else {
+    doApiRequest(url, {
+      method: "POST", headers: headers, body: JSON.stringify(requestBody), signal: abortController.signal
+    }).then(function (data) {
+      handleAIResponse(data, assistantMsg, msgHistory, apiMessages, _useTools);
+    }).catch(function (err) {
+      if (err.name === "AbortError") { setConnStatus("disconnected"); return; }
+      var errMsg = err.message || "";
+      if (_useTools && (errMsg.indexOf("tool") >= 0 || errMsg.indexOf("function") >= 0)) {
+        _useTools = false;
+        var retryBody = { model: config.model, messages: apiMessages, stream: false };
+        doApiRequest(url, {
+          method: "POST", headers: headers, body: JSON.stringify(retryBody), signal: abortController.signal
+        }).then(function (data2) {
+          handleAIResponse(data2, assistantMsg, msgHistory, apiMessages, false);
+        }).catch(function (err2) {
+          if (err2.name === "AbortError") { setConnStatus("disconnected"); return; }
           setConnStatus("error");
-          assistantMsg.content = "❌ 请求失败: " + err.message;
-          if (err.message.indexOf("Failed to fetch") >= 0 || err.message.indexOf("NetworkError") >= 0) {
-            assistantMsg.content += "\n\n💡 这可能是 CORS 问题，请在设置中启用 CORS 代理。";
-          }
-        }
+          assistantMsg.content = "❌ 请求失败: " + (err2.message || "");
+          renderMessages(); isSending = false; updateSendingUI(false);
+        });
+        return;
+      }
+      setConnStatus("error");
+      if (isNetworkError(errMsg)) {
+        assistantMsg.content = "❌ 网络连接失败，请使用 node server.js 启动本地代理服务器";
+      } else if (errMsg.indexOf("timeout") >= 0 || errMsg.indexOf("504") >= 0) {
+        assistantMsg.content = "❌ 请求超时，AI 模型响应时间过长，请稍后重试或换用更快的模型";
+      } else {
+        assistantMsg.content = "❌ 请求失败: " + errMsg;
+      }
+      renderMessages(); isSending = false; updateSendingUI(false);
+    });
+  }
+
+  function handleAIResponse(data, assistantMsg, msgHistory, apiMessages, _useTools) {
+    setConnStatus("connected");
+    var choice = data.choices && data.choices[0];
+    if (!choice) throw new Error("无响应");
+    var msg = choice.message;
+
+    if (msg.content && (msg.content.indexOf("does not exist") >= 0 || msg.content.indexOf("doesn't exist") >= 0 || msg.content.indexOf("image_gen") >= 0 || msg.content.indexOf("image_edit") >= 0)) {
+      if (_useTools) {
+        assistantMsg.content = "⏳ 检测到模型不支持函数调用，正在以代码块模式重试...";
         renderMessages();
-        isSending = false;
-        updateSendingUI(false);
-      });
+        var retryBody = { model: config.model, messages: apiMessages, stream: false };
+        doApiRequest(getApiUrl(), {
+          method: "POST", headers: { "Content-Type": "application/json", "Authorization": "Bearer " + config.apiKey },
+          body: JSON.stringify(retryBody), signal: abortController.signal
+        }).then(function (data2) {
+          handleAIResponse(data2, assistantMsg, msgHistory, apiMessages, false);
+        }).catch(function (err) {
+          if (err.name === "AbortError") { setConnStatus("disconnected"); return; }
+          setConnStatus("error");
+          assistantMsg.content = "❌ 请求失败: " + (err.message || "");
+          renderMessages(); isSending = false; updateSendingUI(false);
+        });
+        return;
+      }
+    }
+
+    assistantMsg.content = msg.content || "";
+    if (msg.tool_calls && msg.tool_calls.length > 0) return processToolCalls(msg.tool_calls, assistantMsg, msgHistory, apiMessages, msg);
+    var ggbScripts = extractGGBScripts(msg.content || "");
+    if (ggbScripts.length > 0) executeGGBScript(ggbScripts.join("\n"));
+    finishAIResponse(assistantMsg);
+  }
+
+  function finishAIResponse(assistantMsg) {
+    renderMessages();
+    saveConversation();
+    isSending = false;
+    updateSendingUI(false);
   }
 
   function processToolCalls(toolCalls, assistantMsg, msgHistory, apiMessages, aiMessage) {
     toolCallRound++;
-    console.log("[Tool] 处理第 " + toolCallRound + " 轮，共 " + toolCalls.length + " 个工具调用");
     if (toolCallRound > MAX_TOOL_ROUNDS) {
-      console.warn("[Tool] 已达到最大工具调用轮次 (" + MAX_TOOL_ROUNDS + ")，强制停止");
       assistantMsg.content += "\n\n⚠️ 工具调用已达上限，已自动停止。图形可能未完全绘制，请发送新指令继续。";
-      renderMessages();
-      saveConversation();
-      isSending = false;
-      updateSendingUI(false);
+      finishAIResponse(assistantMsg);
       return Promise.resolve();
     }
     var toolPromises = toolCalls.map(function (tc) {
       var name = tc.function.name;
       var args;
       try { args = JSON.parse(tc.function.arguments || "{}"); } catch (e) { args = {}; }
-      console.log("[Tool] 调用:", name, args);
       return handleToolCall(name, args).then(function (result) {
-        console.log("[Tool] 结果:", name, result);
         return { id: tc.id, name: name, args: args, result: result };
       });
     });
@@ -1246,85 +1191,58 @@
         else if (r.result && r.result.success === true) resultStr = " ✅ " + (r.result.label ? "label=" + r.result.label : "成功");
         else if (r.result && r.result.elements) resultStr = " 📐 画布有 " + r.result.elements.length + " 个对象";
         else resultStr = " → " + JSON.stringify(r.result).slice(0, 150);
-
         assistantMsg.content += "\n🔧 " + r.name + (cmdStr ? "(" + cmdStr + ")" : "") + resultStr + "\n";
         toolResultParts.push({ tool_call_id: r.id, name: r.name, result: r.result });
       }
       renderMessages();
-
       return continueWithToolResults(apiMessages, aiMessage, toolResultParts, assistantMsg, msgHistory);
     });
   }
 
   function continueWithToolResults(apiMessages, aiMessage, toolResults, assistantMsg, msgHistory) {
     var newApiMessages = apiMessages.slice();
-
     var aiMsgForApi = { role: "assistant", content: aiMessage.content || "" };
-    if (aiMessage.tool_calls) {
-      aiMsgForApi.tool_calls = aiMessage.tool_calls;
-    }
+    if (aiMessage.tool_calls) aiMsgForApi.tool_calls = aiMessage.tool_calls;
     newApiMessages.push(aiMsgForApi);
-
     for (var i = 0; i < toolResults.length; i++) {
-      newApiMessages.push({
-        role: "tool",
-        tool_call_id: toolResults[i].tool_call_id,
-        content: JSON.stringify(toolResults[i].result),
-      });
+      newApiMessages.push({ role: "tool", tool_call_id: toolResults[i].tool_call_id, content: JSON.stringify(toolResults[i].result) });
     }
 
-    var requestBody = {
-      model: config.model,
-      messages: newApiMessages,
-      stream: false,
-    };
-    if (config.useTools) {
-      requestBody.tools = GGB_TOOLS;
-      requestBody.tool_choice = "auto";
-    }
+    var requestBody = { model: config.model, messages: newApiMessages, stream: false };
+    requestBody.tools = GGB_TOOLS;
+    requestBody.tool_choice = "auto";
 
-    var url = getApiUrl();
-
-    return fetch(url, {
-      method: "POST",
-      headers: { "Content-Type": "application/json", "Authorization": "Bearer " + config.apiKey },
-      body: JSON.stringify(requestBody),
-      signal: abortController.signal,
-    })
-      .then(function (res) {
-        if (!res.ok) return res.text().then(function (t) { throw new Error(t); });
-        return res.json();
-      })
-      .then(function (data) {
-        var choice = data.choices && data.choices[0];
-        if (!choice) return;
-
-        var msg = choice.message;
-
-        if (msg.content) {
-          assistantMsg.content += msg.content;
-        }
-
-        if (msg.tool_calls && msg.tool_calls.length > 0) {
-          return processToolCalls(msg.tool_calls, assistantMsg, msgHistory, newApiMessages, msg);
-        }
-
-        if (config.autoExecute) {
-          var ggbScripts = extractGGBScripts(msg.content || "");
-          if (ggbScripts.length > 0) executeGGBScript(ggbScripts.join("\n"));
-        }
-        renderMessages();
-        saveConversation();
-        isSending = false;
-        updateSendingUI(false);
-      })
-      .catch(function (err) {
-        if (err.name !== "AbortError") assistantMsg.content += "\n❌ " + err.message;
-        renderMessages();
-        isSending = false;
-        updateSendingUI(false);
-      });
+    return doApiRequest(getApiUrl(), {
+      method: "POST", headers: { "Content-Type": "application/json", "Authorization": "Bearer " + config.apiKey },
+      body: JSON.stringify(requestBody), signal: abortController.signal
+    }).then(function (data) {
+      return handleToolFollowUp(data, assistantMsg, msgHistory, newApiMessages);
+    }).catch(function (err) {
+      if (err.name === "AbortError") return;
+      var errMsg = err.message || "";
+      if (errMsg.indexOf("timeout") >= 0 || errMsg.indexOf("504") >= 0) {
+        assistantMsg.content += "\n❌ 请求超时，AI 模型响应时间过长";
+      } else {
+        assistantMsg.content += "\n❌ " + errMsg;
+      }
+      renderMessages(); isSending = false; updateSendingUI(false);
+    });
   }
+
+  function handleToolFollowUp(data, assistantMsg, msgHistory, apiMessages) {
+    var choice = data.choices && data.choices[0];
+    if (!choice) return;
+    var msg = choice.message;
+    if (msg.content) assistantMsg.content += msg.content;
+    if (msg.tool_calls && msg.tool_calls.length > 0) return processToolCalls(msg.tool_calls, assistantMsg, msgHistory, apiMessages, msg);
+    var ggbScripts = extractGGBScripts(msg.content || "");
+    if (ggbScripts.length > 0) executeGGBScript(ggbScripts.join("\n"));
+    finishAIResponse(assistantMsg);
+  }
+
+  var SVG_COPY = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>';
+  var SVG_REGEN = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>';
+  var SVG_EXPAND = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>';
 
   function renderMessages() {
     var container = $("messages-list");
@@ -1334,17 +1252,13 @@
       if (msg.role === "tool") return;
       var div = document.createElement("div");
       div.className = "message " + msg.role;
+      div.setAttribute("data-idx", idx);
       var dc = formatMessage(msg.content || "", msg.image);
-      var actionsHtml =
-        '<button class="msg-action" data-action="copy" data-idx="' + idx + '" title="复制"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></button>';
-      if (msg.role === "assistant") {
-        actionsHtml += '<button class="msg-action" data-action="regenerate" data-idx="' + idx + '" title="重新生成"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg></button>';
-      } else if (msg.role === "user") {
-        actionsHtml += '<button class="msg-action" data-action="regenerate-user" data-idx="' + idx + '" title="重新生成"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg></button>';
-      }
+      var actionsHtml = '<button class="msg-action" data-action="copy" data-idx="' + idx + '" title="复制">' + SVG_COPY + '</button>';
+      actionsHtml += '<button class="msg-action" data-action="' + (msg.role === "assistant" ? "regenerate" : "regenerate-user") + '" data-idx="' + idx + '" title="重新生成">' + SVG_REGEN + '</button>';
       div.innerHTML =
         '<div class="message-content">' + dc + '</div>' +
-        '<button class="msg-expand-btn" style="display:none"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg><span class="expand-text">展开</span></button>' +
+        '<button class="msg-expand-btn" style="display:none">' + SVG_EXPAND + '<span class="expand-text">展开</span></button>' +
         '<div class="message-actions">' + actionsHtml + "</div>";
       frag.appendChild(div);
       expandDivs.push(div);
@@ -1360,27 +1274,86 @@
           expandBtn.style.display = "";
           expandBtn.addEventListener("click", function () {
             var isCollapsed = contentEl.classList.contains("collapsed");
-            if (isCollapsed) {
-              contentEl.classList.remove("collapsed");
-              expandBtn.classList.add("expanded");
-              expandBtn.querySelector(".expand-text").textContent = "折叠";
-            } else {
-              contentEl.classList.add("collapsed");
-              expandBtn.classList.remove("expanded");
-              expandBtn.querySelector(".expand-text").textContent = "展开";
-            }
+            contentEl.classList.toggle("collapsed", !isCollapsed);
+            expandBtn.classList.toggle("expanded", isCollapsed);
+            expandBtn.querySelector(".expand-text").textContent = isCollapsed ? "折叠" : "展开";
           });
         }
       });
       container.scrollTop = container.scrollHeight;
     });
+    renderConvNav();
+  }
+
+  function renderConvNav() {
+    var nav = $("conv-nav");
+    if (!nav) return;
+    nav.innerHTML = "";
+    var userMsgs = [];
+    messages.forEach(function (msg, idx) {
+      if (msg.role === "user") userMsgs.push({ msg: msg, idx: idx });
+    });
+    if (userMsgs.length < 2) { nav.style.display = "none"; return; }
+    nav.style.display = "";
+    userMsgs.forEach(function (item) {
+      var dot = document.createElement("div");
+      dot.className = "conv-dot";
+      dot.title = (item.msg.content || "图片消息").slice(0, 30);
+      dot.setAttribute("data-msg-idx", item.idx);
+      nav.appendChild(dot);
+    });
+    requestAnimationFrame(updateConvNavActive);
+  }
+
+  function updateConvNavActive() {
+    if (_navClickLock && Date.now() < _navClickLock) return;
+    var container = $("messages-list");
+    var nav = $("conv-nav");
+    if (!container || !nav) return;
+    var dots = nav.querySelectorAll(".conv-dot");
+    if (dots.length === 0) return;
+    var userMsgEls = container.querySelectorAll(".message.user");
+    if (userMsgEls.length === 0) return;
+    var containerRect = container.getBoundingClientRect();
+    var viewH = container.clientHeight;
+    var scrollTop = container.scrollTop;
+    var scrollH = container.scrollHeight;
+    var refY = containerRect.top + viewH * 0.35;
+    var bestIdx = null;
+    var bestDist = Infinity;
+    for (var i = 0; i < userMsgEls.length; i++) {
+      var rect = userMsgEls[i].getBoundingClientRect();
+      var center = rect.top + rect.height / 2;
+      var dist = Math.abs(center - refY);
+      if (dist < bestDist) {
+        bestDist = dist;
+        bestIdx = userMsgEls[i].getAttribute("data-idx");
+      }
+    }
+    if (bestIdx === null && userMsgEls.length > 0) {
+      bestIdx = userMsgEls[0].getAttribute("data-idx");
+    }
+    if (scrollTop < 10 && userMsgEls.length > 0) {
+      bestIdx = userMsgEls[0].getAttribute("data-idx");
+    }
+    if (scrollTop + viewH >= scrollH - 10 && userMsgEls.length > 0) {
+      var lastEl = userMsgEls[userMsgEls.length - 1];
+      var lastIdx = lastEl.getAttribute("data-idx");
+      if (lastIdx !== bestIdx) {
+        var lastRect = lastEl.getBoundingClientRect();
+        if (lastRect.bottom > containerRect.top && lastRect.top < containerRect.bottom) {
+          bestIdx = lastIdx;
+        }
+      }
+    }
+    for (var j = 0; j < dots.length; j++) {
+      dots[j].classList.toggle("active", dots[j].getAttribute("data-msg-idx") === bestIdx);
+    }
   }
 
   function formatMessage(content, image) {
     var html = "";
-    if (image) {
-      html += '<div class="msg-image-wrapper"><img src="' + image + '" class="msg-image" alt="上传的图片" onclick="window._expandImage(this.src)"></div>';
-    }
+    if (image) html += '<div class="msg-image-wrapper"><img src="' + image + '" class="msg-image" alt="上传的图片" onclick="window._expandImage(this.src)"></div>';
     var escaped = escapeHtml(content);
     escaped = escaped.replace(/🔧 (\w+)(\([^)]*\))?/g, '<span class="tool-call">🔧 $1$2</span>');
     escaped = escaped.replace(/✅/g, '<span class="tool-success">✅</span>');
@@ -1402,6 +1375,21 @@
   };
 
   document.addEventListener("click", function (e) {
+    var convDot = e.target.closest(".conv-dot");
+    if (convDot) {
+      var msgIdx = convDot.getAttribute("data-msg-idx");
+      if (msgIdx !== null) {
+        var msgEl = document.querySelector('.message.user[data-idx="' + msgIdx + '"]');
+        if (msgEl) {
+          _navClickLock = Date.now() + 800;
+          var dots = document.querySelectorAll(".conv-dot");
+          for (var i = 0; i < dots.length; i++) dots[i].classList.remove("active");
+          convDot.classList.add("active");
+          msgEl.scrollIntoView({ behavior: "smooth", block: "center" });
+        }
+      }
+      return;
+    }
     var btn = e.target.closest(".msg-action");
     if (!btn) return;
     var action = btn.getAttribute("data-action");
@@ -1411,13 +1399,8 @@
       if (text) {
         navigator.clipboard.writeText(text).then(function () { showToast("已复制"); }).catch(function () {
           var ta = document.createElement("textarea");
-          ta.value = text;
-          ta.style.position = "fixed";
-          ta.style.left = "-9999px";
-          document.body.appendChild(ta);
-          ta.select();
-          document.execCommand("copy");
-          document.body.removeChild(ta);
+          ta.value = text; ta.style.position = "fixed"; ta.style.left = "-9999px";
+          document.body.appendChild(ta); ta.select(); document.execCommand("copy"); document.body.removeChild(ta);
           showToast("已复制");
         });
       }
@@ -1456,16 +1439,14 @@
     }
   });
 
-  function escapeHtml(t) { var d = document.createElement("div"); d.textContent = t; return d.innerHTML; }
+  var _escapeDiv = document.createElement("div");
+  function escapeHtml(t) { _escapeDiv.textContent = t; return _escapeDiv.innerHTML; }
+
+  function safeApi(fn, fallback) { try { return fn(); } catch (e) { return fallback; } }
 
   function captureGGBState() {
     if (!ggbApp) return null;
-    try {
-      return ggbApp.getXML();
-    } catch (e) {
-      console.warn("[GGB] 捕获状态失败:", e);
-      return null;
-    }
+    try { return ggbApp.getXML(); } catch (e) { return null; }
   }
 
   function restoreGGBToMessage(msgIdx) {
@@ -1473,35 +1454,21 @@
     if (!msg || !ggbApp) return;
     var state = msg.ggbState;
     if (state) {
-      try {
-        ggbApp.setXML(state);
-        ggbSelection = [];
-        console.log("[GGB] 图形已回滚到消息", msgIdx, "的状态");
-        showToast("图形已回滚");
-      } catch (e) {
-        console.warn("[GGB] 回滚图形失败:", e);
-        showToast("图形回滚失败");
-      }
+      try { ggbApp.setXML(state); ggbSelection = []; showToast("图形已回滚"); }
+      catch (e) { showToast("图形回滚失败"); }
     } else {
-      try {
-        ggbApp.reset();
-        ggbSelection = [];
-        showToast("画板已重置");
-      } catch (e) {
-        console.warn("[GGB] 重置画板失败:", e);
-      }
+      try { ggbApp.reset(); ggbSelection = []; showToast("画板已重置"); } catch (e) {}
     }
   }
 
   function showConfirmModal(title, message, onConfirm) {
-    var existing = document.querySelector(".confirm-modal");
+    var existing = document.querySelector(".overlay-modal");
     if (existing) existing.remove();
-
     var overlay = document.createElement("div");
-    overlay.className = "confirm-modal";
+    overlay.className = "overlay-modal";
     overlay.innerHTML =
-      '<div class="confirm-overlay"></div>' +
-      '<div class="confirm-content">' +
+      '<div class="overlay-modal-bg"></div>' +
+      '<div class="overlay-modal-box confirm-box">' +
         '<div class="confirm-title">' + escapeHtml(title) + '</div>' +
         '<div class="confirm-message">' + escapeHtml(message) + '</div>' +
         '<div class="confirm-actions">' +
@@ -1510,13 +1477,148 @@
         '</div>' +
       '</div>';
     document.body.appendChild(overlay);
-
-    overlay.querySelector(".confirm-overlay").addEventListener("click", function () { overlay.remove(); });
+    overlay.querySelector(".overlay-modal-bg").addEventListener("click", function () { overlay.remove(); });
     overlay.querySelector(".confirm-cancel").addEventListener("click", function () { overlay.remove(); });
-    overlay.querySelector(".confirm-ok").addEventListener("click", function () {
-      overlay.remove();
-      if (onConfirm) onConfirm();
-    });
+    overlay.querySelector(".confirm-ok").addEventListener("click", function () { overlay.remove(); if (onConfirm) onConfirm(); });
+  }
+
+  var CHANGELOG = [
+    { version: "1.6.1", sections: [
+      { title: "优化", tag: "opt", items: [
+        "移除 NVIDIA NIM 平台及其 API URL 配置"
+      ]}
+    ]},
+    { version: "1.6.0", sections: [
+      { title: "新功能", tag: "new", items: [
+        "坐标轴/网格显示与 GGB 样式栏双向同步",
+        "模型下拉菜单支持键盘导航和搜索筛选",
+        "模型下拉菜单 fixed 定位避免被 modal 裁剪"
+      ]},
+      { title: "修复", tag: "fix", items: [
+        "模型下拉菜单选中后再次点击只显示当前模型的 bug",
+        "模型下拉菜单高度调整为5行（150px）",
+        "设置面板高度适配下拉菜单展开空间"
+      ]},
+      { title: "优化", tag: "opt", items: [
+        "统一 API 请求架构：9个重复 fetch/代理函数合并为1个 doApiRequest",
+        "提取重复的按钮重置代码为 resetFetchBtn 辅助函数",
+        "移除冗余的 _publicProxyTried 状态变量",
+        "代码精简约 166 行（8%）"
+      ]}
+    ]},
+    { version: "1.5.0", sections: [
+      { title: "新功能", tag: "new", items: [
+        "Favicon 金色空洞立方体设计",
+        "工具栏 Logo 替换为 Favicon 图标"
+      ]},
+      { title: "界面", tag: "ui", items: [
+        "Happy Hues 自然绿+金黄色配色方案",
+        "千问图标更换为 LobeHub 官方 Logo",
+        "GGB 美化预设精简为浅色经典与暖色教学",
+        "美化预设切换后同步更新控件状态",
+        "美化面板背景不再虚化"
+      ]},
+      { title: "优化", tag: "opt", items: [
+        "修复 compressImage 参数错误",
+        "CSS 变量体系精简与色值统一引用",
+        "Service Worker 缓存补全（favicon/manifest）",
+        "模型列表压缩存储减少体积",
+        "移除黑板风格预设及冗余代码"
+      ]}
+    ]},
+    { version: "1.4.1", sections: [
+      { title: "优化", tag: "opt", items: [
+        "移除重复定义的 safeApi 函数（死代码清理）",
+        "移除 renderMessages 中未使用的 shouldScroll 变量",
+        "移除 resizeCanvas 中未使用的 quality 参数",
+        "移除 CSS 中未使用的 .changelog-modal/.changelog-overlay/.changelog-content 样式"
+      ]}
+    ]},
+    { version: "1.4.0", sections: [
+      { title: "新功能", tag: "new", items: [
+        "重置画板按钮（几何视图左侧，带确认弹窗）",
+        "GeoGebra 官方样式栏按钮（绘图区右上角）",
+        "点击版本号查看更新日志",
+        "导出脚本包含可执行的 GeoGebra 命令块（含颜色、线宽、点大小、填充等样式）"
+      ]},
+      { title: "修复", tag: "fix", items: [
+        "导出 GGB 改用 getBase64() 生成标准 .ggb ZIP 文件",
+        "导入 GGB 改用 setBase64() 正确加载 .ggb 文件",
+        "导出脚本函数曲线方程缺失问题（改用 getValueString）",
+        "千问/Gemini 按钮改用 <a target=_blank> 确保跳转正常"
+      ]},
+      { title: "优化", tag: "opt", items: [
+        "千问/Gemini 图标替换为官方 Logo",
+        "sw.js 变量命名规范化并添加注释",
+        "导出脚本对象列表附带样式属性标注"
+      ]}
+    ]},
+    { version: "1.3.0", sections: [
+      { title: "新功能", tag: "new", items: [
+        "可搜索模型组合框（下拉选择 + 关键字筛选）",
+        "对话导航小点（左侧，2个以上用户输入才显示）",
+        "导入/导出合并为下拉菜单（导入ggb/导出ggb/导出脚本）",
+        "导出文件名格式：geogebra_yyyymmdd_hhmmss",
+        "导出脚本为 Markdown 格式"
+      ]},
+      { title: "修复", tag: "fix", items: [
+        "下拉菜单互斥关闭",
+        "导航小点滚动高亮算法（最近中心点 + 边界条件）",
+        "发送后自动滚动到底部",
+        "获取模型时清空输入框"
+      ]}
+    ]},
+    { version: "1.2.0", sections: [
+      { title: "新功能", tag: "new", items: [
+        "千问/Gemini 外部链接按钮",
+        "模型 Badge 只显示模型名称，固定宽度 180px",
+        "版本号显示（右下角）"
+      ]},
+      { title: "界面", tag: "ui", items: [
+        "AI 助手栏与左侧画板等高",
+        "下拉菜单左对齐、宽度优化"
+      ]}
+    ]},
+    { version: "1.1.0", sections: [
+      { title: "新功能", tag: "new", items: [
+        "AI 对话与 GeoGebra 画板联动",
+        "多平台 API 配置（OpenAI 兼容接口）",
+        "对话历史记录保存与切换",
+        "GeoGebra 脚本自动识别与执行"
+      ]},
+      { title: "界面", tag: "ui", items: [
+        "左右分栏布局（画板 + AI 助手）",
+        "几何视图切换下拉菜单",
+        "API 密钥安全输入与显示切换"
+      ]}
+    ]}
+  ];
+
+  function showChangelog() {
+    var existing = document.querySelector(".overlay-modal");
+    if (existing) { existing.remove(); return; }
+    var overlay = document.createElement("div");
+    overlay.className = "overlay-modal";
+    var html = '<div class="overlay-modal-bg"></div><div class="overlay-modal-box changelog-box">';
+    html += '<div class="changelog-header"><div class="changelog-title">AI GGB 更新日志</div><button class="changelog-close"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></div>';
+    for (var v = 0; v < CHANGELOG.length; v++) {
+      var ver = CHANGELOG[v];
+      for (var s = 0; s < ver.sections.length; s++) {
+        var sec = ver.sections[s];
+        html += '<div class="changelog-section">';
+        html += '<div class="changelog-section-title">v' + ver.version + ' · ' + sec.title + '</div>';
+        html += '<ul class="changelog-list">';
+        for (var i = 0; i < sec.items.length; i++) {
+          html += '<li><span class="changelog-tag ' + sec.tag + '">' + sec.title + '</span>' + escapeHtml(sec.items[i]) + '</li>';
+        }
+        html += '</ul></div>';
+      }
+    }
+    html += '</div>';
+    overlay.innerHTML = html;
+    document.body.appendChild(overlay);
+    overlay.querySelector(".overlay-modal-bg").addEventListener("click", function () { overlay.remove(); });
+    overlay.querySelector(".changelog-close").addEventListener("click", function () { overlay.remove(); });
   }
 
   function loadConversations() {
@@ -1524,17 +1626,17 @@
     if (conversations.length > 0) { currentConversationId = conversations[0].id; messages = conversations[0].messages; }
     else newConversation();
   }
-  function saveConversation() {
+
+  function saveConversation() { debouncedSave(); }
+
+  function saveConversationImmediate() {
     var idx = conversations.findIndex(function (c) { return c.id === currentConversationId; });
     var firstUser = messages.find(function (m) { return m.role === "user"; });
     var title = firstUser ? (firstUser.content || "新对话").slice(0, 40) : "新对话";
     if (firstUser && firstUser.image && title === "新对话") title = "图片分析";
     var msgsForSave = messages.map(function (m) {
       var msg = { id: m.id, role: m.role, content: m.content };
-      if (m.image) {
-        msg.image = m.thumbnail || m.image;
-        delete msg.thumbnail;
-      }
+      if (m.image) { msg.image = m.thumbnail || m.image; }
       if (m.tool_calls) msg.tool_calls = m.tool_calls;
       if (m.tool_call_id) msg.tool_call_id = m.tool_call_id;
       return msg;
@@ -1552,6 +1654,7 @@
       try { localStorage.setItem("ai-ggb-conversations", JSON.stringify(conversations)); } catch (e2) {}
     }
   }
+
   function renderHistory() {
     var c = $("history-list"); c.innerHTML = "";
     conversations.forEach(function (conv, idx) {
@@ -1580,6 +1683,7 @@
       c.appendChild(d);
     });
   }
+
   function newConversation() {
     currentConversationId = "c" + Date.now();
     messages = [];
@@ -1594,18 +1698,14 @@
   }
 
   function fetchModels() {
+    $("model-input").value = "";
+    $("model-select").value = "";
     var platformKey = $("platform-select").value;
     if (platformKey === "poixe") {
-      var select = $("model-select");
-      select.innerHTML = '<option value="">-- 选择模型 (' + POIXE_MODELS.length + ' 个可用) --</option>';
-      for (var i = 0; i < POIXE_MODELS.length; i++) {
-        var opt = document.createElement("option");
-        opt.value = POIXE_MODELS[i];
-        opt.textContent = POIXE_MODELS[i];
-        if (POIXE_MODELS[i] === config.model) opt.selected = true;
-        select.appendChild(opt);
-      }
-      showToast("已加载 " + POIXE_MODELS.length + " 个 Poixe AI 模型");
+      var models = getPoixeModels();
+      if (window._setComboModels) window._setComboModels(models);
+      $("model-input").placeholder = "-- 选择模型 (" + models.length + " 个可用) --";
+      showToast("已加载 " + models.length + " 个 Poixe AI 模型");
       return;
     }
     var baseUrl = $("base-url").value.trim();
@@ -1615,78 +1715,120 @@
     btn.disabled = true;
     btn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="animation:spin 1s linear infinite"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg> 获取中...';
     var isGemini = baseUrl.indexOf("generativelanguage.googleapis.com") >= 0;
-    var fetchUrl = baseUrl;
-    if (config.useProxy && config.proxyUrl) {
-      fetchUrl = config.proxyUrl + "/" + baseUrl.replace(/^https?:\/\//, "");
-    }
-    var headers = { "Content-Type": "application/json" };
-    if (isGemini) {
-      fetchUrl = fetchUrl.replace(/\/+$/, "") + "/models?key=" + encodeURIComponent(apiKey);
-    } else {
-      if (!fetchUrl.endsWith("/models")) {
-        fetchUrl = fetchUrl.replace(/\/+$/, "") + "/models";
-      }
-      if (apiKey) headers["Authorization"] = "Bearer " + apiKey;
-    }
-    fetch(fetchUrl, { method: "GET", headers: headers })
-      .then(function (res) {
+    var targetUrl = baseUrl.replace(/\/+$/, "") + "/models";
+    if (isGemini) targetUrl += "?key=" + encodeURIComponent(apiKey);
+    var headers = {};
+    if (!isGemini && apiKey) headers["Authorization"] = "Bearer " + apiKey;
+
+    doApiRequest(targetUrl, {
+      method: "GET", headers: headers, isGemini: isGemini, apiKey: apiKey
+    }).then(function (data) {
+      parseModelList(data);
+      resetFetchBtn(btn);
+    }).catch(function (err) {
+      showFetchError(err.message || "");
+      resetFetchBtn(btn);
+    });
+  }
+
+  function doApiRequest(url, opts) {
+    var method = opts.method || "GET";
+    var body = opts.body;
+    var signal = opts.signal;
+    var isGemini = opts.isGemini;
+    var apiKey = opts.apiKey;
+    var directHeaders = opts.headers || {};
+    var publicProxyIdx = 0;
+
+    function makeFetch(fetchUrl, fetchHeaders, fetchBody) {
+      var fetchOpts = { method: method, headers: fetchHeaders };
+      if (fetchBody !== undefined) fetchOpts.body = fetchBody;
+      if (signal) fetchOpts.signal = signal;
+      return fetch(fetchUrl, fetchOpts).then(function (res) {
         if (!res.ok) return res.text().then(function (t) { throw new Error(res.status + " " + t); });
         return res.json();
-      })
-      .then(function (data) {
-        var models = [];
-        if (Array.isArray(data.data)) {
-          models = data.data.map(function (m) { return m.id || m.name || m; });
-        } else if (Array.isArray(data.models)) {
-          models = data.models.map(function (m) {
-            if (typeof m === "string") return m;
-            var name = m.name || m.id || m.model || "";
-            if (name.indexOf("/") >= 0) name = name.split("/").pop();
-            return name;
-          });
-        } else if (Array.isArray(data)) {
-          models = data.map(function (m) { return typeof m === "string" ? m : (m.id || m.name || ""); });
-        }
-        models = models.filter(function (m) { return m && typeof m === "string"; });
-        models.sort();
-        var select = $("model-select");
-        select.innerHTML = '<option value="">-- 选择模型 (' + models.length + ' 个可用) --</option>';
-        var currentModel = config.model;
-        for (var i = 0; i < models.length; i++) {
-          if (!models[i]) continue;
-          var opt = document.createElement("option");
-          opt.value = models[i];
-          opt.textContent = models[i];
-          if (models[i] === currentModel) opt.selected = true;
-          select.appendChild(opt);
-        }
-        if (models.length > 0) {
-          showToast("获取到 " + models.length + " 个模型");
-        } else {
-          showToast("未获取到模型，请检查 API 地址");
-        }
-      })
-      .catch(function (err) {
-        console.error("[Models] 获取失败:", err);
-        showToast("获取模型失败: " + err.message);
-      })
-      .finally(function () {
-        btn.disabled = false;
-        btn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg> 获取模型';
       });
+    }
+
+    function tryDirect() { return makeFetch(url, directHeaders, body); }
+
+    function tryServerProxy() {
+      var proxyUrl = "/api/proxy?url=" + encodeURIComponent(url);
+      if (!isGemini && apiKey) proxyUrl += "&key=" + encodeURIComponent(apiKey);
+      if (isGemini) proxyUrl += "&gemini=1";
+      return makeFetch(proxyUrl, { "Content-Type": "application/json" }, body);
+    }
+
+    function tryPublicProxy() {
+      if (publicProxyIdx >= PUBLIC_CORS_PROXIES.length) return Promise.reject(new Error("所有代理均失败"));
+      var proxyBase = PUBLIC_CORS_PROXIES[publicProxyIdx++];
+      var proxyUrl = proxyBase + encodeURIComponent(url);
+      var fetchHeaders = {};
+      if (!isGemini && apiKey) fetchHeaders["Authorization"] = "Bearer " + apiKey;
+      return makeFetch(proxyUrl, fetchHeaders, body);
+    }
+
+    if (_serverProxyAvailable) return tryServerProxy();
+
+    return tryDirect().catch(function (err) {
+      if (err.name === "AbortError") throw err;
+      if (!isNetworkError(err.message || "")) throw err;
+      if (_serverProxyAvailable) return tryServerProxy();
+      return tryPublicProxy().catch(function (err2) {
+        if (err2.name === "AbortError") throw err2;
+        if (isNetworkError(err2.message || "") && publicProxyIdx < PUBLIC_CORS_PROXIES.length) return tryPublicProxy();
+        throw err2;
+      });
+    });
+  }
+
+  var FETCH_BTN_HTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg> 获取模型';
+
+  function resetFetchBtn(btn) { btn.disabled = false; btn.innerHTML = FETCH_BTN_HTML; }
+
+  function isNetworkError(msg) {
+    return msg.indexOf("Failed to fetch") >= 0 || msg.indexOf("NetworkError") >= 0 || msg.indexOf("Load failed") >= 0 || msg.indexOf("Network request failed") >= 0;
+  }
+
+  function showFetchError(msg) {
+    if (window._setComboModels) window._setComboModels([]);
+    $("model-input").placeholder = "-- 选择模型 (获取失败) --";
+    if (msg.indexOf("401") >= 0) {
+      showToast("获取模型失败: API Key 无效或未填写");
+    } else if (msg.indexOf("403") >= 0) {
+      showToast("获取模型失败: 无权限访问，请检查 API Key");
+    } else if (msg.indexOf("429") >= 0) {
+      showToast("获取模型失败: 请求过于频繁，请稍后重试");
+    } else if (isNetworkError(msg)) {
+      showToast("获取模型失败: 网络连接错误，请使用 node server.js 启动服务器");
+    } else {
+      showToast("获取模型失败: " + msg);
+    }
+  }
+
+  function parseModelList(data) {
+    var models = [];
+    if (Array.isArray(data.data)) models = data.data.map(function (m) { return m.id || m.name || m; });
+    else if (Array.isArray(data.models)) models = data.models.map(function (m) {
+      if (typeof m === "string") return m;
+      var name = m.name || m.id || m.model || "";
+      if (name.indexOf("/") >= 0) name = name.split("/").pop();
+      return name;
+    });
+    else if (Array.isArray(data)) models = data.map(function (m) { return typeof m === "string" ? m : (m.id || m.name || ""); });
+    models = models.filter(function (m) { return m && typeof m === "string"; }).sort();
+    if (window._setComboModels) window._setComboModels(models);
+    $("model-input").placeholder = "-- 选择模型 (" + models.length + " 个可用) --";
+    showToast(models.length > 0 ? "获取到 " + models.length + " 个模型" : "未获取到模型，请检查 API 地址");
   }
 
   function updateModelBadge() {
     var badge = $("model-badge");
     if (badge && config.model) {
-      var platformKey = $("platform-select") ? $("platform-select").value : "";
-      var platformName = platformKey && PLATFORMS[platformKey] ? PLATFORMS[platformKey].name : "";
       var shortModel = config.model.replace(/^.*\//, "");
-      badge.textContent = platformName ? shortModel + " | " + platformName : shortModel;
-      badge.title = config.model + (platformName ? " | " + platformName : "");
-    } else if (badge) {
-      badge.textContent = "";
-    }
+      badge.textContent = shortModel;
+      badge.title = config.model;
+    } else if (badge) { badge.textContent = ""; }
   }
 
   function closeBeautifyPanel() {
@@ -1697,27 +1839,107 @@
   function exportGGB() {
     if (!ggbApp) { showToast("GeoGebra 未就绪"); return; }
     try {
-      var xml = ggbApp.getXML();
-      var blob = new Blob([xml], { type: "application/xml" });
-      var url = URL.createObjectURL(blob);
-      var a = document.createElement("a");
-      a.href = url;
-      a.download = "geogebra_" + new Date().toISOString().slice(0, 10) + ".ggb";
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      URL.revokeObjectURL(url);
-      showToast("已导出 .ggb 文件");
-    } catch (e) {
-      showToast("导出失败: " + e.message);
-    }
+      var allObj = ggbApp.getAllObjectNames ? ggbApp.getAllObjectNames() : [];
+      if (!allObj || allObj.length === 0) { showToast("画板为空，无文件可导出"); return; }
+      ggbApp.getBase64(function (base64) {
+        if (!base64) { showToast("导出失败"); return; }
+        var binary = atob(base64);
+        var bytes = new Uint8Array(binary.length);
+        for (var i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
+        downloadBlob(new Blob([bytes], { type: "application/octet-stream" }), getTimestampName() + ".ggb");
+        showToast("已导出 .ggb 文件");
+      });
+    } catch (e) { showToast("导出失败: " + e.message); }
+  }
+
+  function exportScript() {
+    if (!ggbApp) { showToast("GeoGebra 未就绪"); return; }
+    try {
+      var allObj = ggbApp.getAllObjectNames ? ggbApp.getAllObjectNames() : [];
+      if (!allObj || allObj.length === 0) { showToast("画板为空，无文件可导出"); return; }
+      var md = "# GeoGebra 脚本指令\n\n";
+      var points = [], functions = [], others = [];
+      var cmds = [];
+      var FUNC_TYPES = { function:1, conic:1, implicitcurve:1, polar:1, line:1, ray:1, segment:1, vector:1 };
+      for (var i = 0; i < allObj.length; i++) {
+        var label = allObj[i];
+        var type = safeApi(function(){ return ggbApp.getObjectType(label); }, "");
+        var valueStr = safeApi(function(){ return ggbApp.getValueString(label, false) + ""; }, "");
+        var cmdStr = safeApi(function(){ return ggbApp.getCommandString(label, false) + ""; }, "");
+        var defStr = safeApi(function(){ return ggbApp.getDefinitionString(label) + ""; }, "");
+        var color = safeApi(function(){ return ggbApp.getColor(label) + ""; }, "");
+        var lineThickness = safeApi(function(){ return ggbApp.getLineThickness(label); }, 0);
+        var pointSize = safeApi(function(){ return ggbApp.getPointSize(label); }, 0);
+        var filling = safeApi(function(){ return ggbApp.getFilling(label); }, 0);
+        var visible = safeApi(function(){ return ggbApp.getVisible(label); }, true);
+        var info = { label:label, type:type, valueStr:valueStr, cmdStr:cmdStr, defStr:defStr, color:color, lineThickness:lineThickness, pointSize:pointSize, filling:filling, visible:visible };
+        if (type === "point") {
+          info.x = safeApi(function(){ return ggbApp.getXcoord(label); }, 0);
+          info.y = safeApi(function(){ return ggbApp.getYcoord(label); }, 0);
+          points.push(info);
+        } else if (FUNC_TYPES[type]) {
+          functions.push(info);
+        } else {
+          others.push(info);
+        }
+        cmds.push(cmdStr || valueStr);
+        if (color && color.length === 7) {
+          var r = parseInt(color.substring(1,3),16), g = parseInt(color.substring(3,5),16), b = parseInt(color.substring(5,7),16);
+          cmds.push("SetColor(" + label + ", " + r + ", " + g + ", " + b + ")");
+        }
+        if (lineThickness > 0 && type !== "point") cmds.push("SetLineThickness(" + label + ", " + lineThickness + ")");
+        if (pointSize > 0 && type === "point") cmds.push("SetPointSize(" + label + ", " + pointSize + ")");
+        if (filling > 0) cmds.push("SetFilling(" + label + ", " + filling.toFixed(2) + ")");
+        if (!visible) cmds.push("ShowLabel(" + label + ", false)");
+      }
+      function fmtStyle(obj) {
+        var parts = [];
+        if (obj.color) parts.push("颜色" + obj.color);
+        if (obj.lineThickness > 0 && obj.type !== "point") parts.push("线宽" + obj.lineThickness);
+        if (obj.pointSize > 0 && obj.type === "point") parts.push("点大小" + obj.pointSize);
+        if (obj.filling > 0) parts.push("填充" + obj.filling.toFixed(2));
+        if (!obj.visible) parts.push("隐藏");
+        return parts.length > 0 ? " *" + parts.join(", ") + "*" : "";
+      }
+      md += "## 点坐标\n\n";
+      if (points.length === 0) md += "- 无\n";
+      for (var i = 0; i < points.length; i++) {
+        var p = points[i];
+        var expr = p.valueStr || p.defStr || "";
+        if (expr) md += "- `" + expr + "`" + fmtStyle(p) + "\n";
+        else {
+          var px = typeof p.x === "number" ? p.x.toFixed(4) : p.x;
+          var py = typeof p.y === "number" ? p.y.toFixed(4) : p.y;
+          md += "- `" + p.label + " = (" + px + ", " + py + ")`" + fmtStyle(p) + "\n";
+        }
+      }
+      md += "\n## 函数 / 曲线 / 直线\n\n";
+      if (functions.length === 0) md += "- 无\n";
+      for (var i = 0; i < functions.length; i++) {
+        var f = functions[i];
+        var expr = f.valueStr || f.cmdStr || f.defStr || "";
+        if (expr) md += "- `" + expr + "`" + fmtStyle(f) + "\n";
+        else md += "- `" + f.label + "` (" + f.type + ")" + fmtStyle(f) + "\n";
+      }
+      md += "\n## 其他对象\n\n";
+      if (others.length === 0) md += "- 无\n";
+      for (var i = 0; i < others.length; i++) {
+        var o = others[i];
+        var expr = o.valueStr || o.cmdStr || o.defStr || "";
+        if (expr) md += "- `" + expr + "` (" + o.type + ")" + fmtStyle(o) + "\n";
+        else md += "- `" + o.label + "` (" + o.type + ")" + fmtStyle(o) + "\n";
+      }
+      md += "\n## GeoGebra 命令\n\n```geogebra\n";
+      for (var i = 0; i < cmds.length; i++) md += cmds[i] + "\n";
+      md += "```\n";
+      downloadBlob(new Blob([md], { type: "text/markdown" }), getTimestampName() + ".md");
+      showToast("已导出脚本文件");
+    } catch (e) { showToast("导出脚本失败: " + e.message); }
   }
 
   function formatDate(isoStr) {
     try {
-      var d = new Date(isoStr);
-      var now = new Date();
-      var diff = now - d;
+      var d = new Date(isoStr), diff = Date.now() - d;
       if (diff < 60000) return "刚刚";
       if (diff < 3600000) return Math.floor(diff / 60000) + " 分钟前";
       if (diff < 86400000) return Math.floor(diff / 3600000) + " 小时前";
@@ -1725,14 +1947,13 @@
     } catch (e) { return isoStr; }
   }
 
+  var _toastEl = null;
   function showToast(msg) {
-    var existing = document.querySelector(".toast");
-    if (existing) existing.remove();
-    var t = document.createElement("div");
-    t.className = "toast";
-    t.textContent = msg;
-    document.body.appendChild(t);
-    setTimeout(function () { t.remove(); }, 2500);
+    if (!_toastEl) { _toastEl = document.createElement("div"); _toastEl.className = "toast"; }
+    _toastEl.textContent = msg;
+    if (!_toastEl.parentNode) document.body.appendChild(_toastEl);
+    clearTimeout(_toastEl._timer);
+    _toastEl._timer = setTimeout(function () { if (_toastEl.parentNode) _toastEl.parentNode.removeChild(_toastEl); }, 2500);
   }
 
 })();
