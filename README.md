@@ -50,6 +50,13 @@ AI GGB 是一款将 AI 大语言模型与 GeoGebra 动态几何画板深度融�
 - **自定义系统提示词**：可完全自定义 AI 角色和行为
 - **CORS 代理**：内置服务端代理 + 公共 CORS 代理自动降级，解决跨域问题
 
+### 几何引擎支持
+- **双引擎架构**：支持 GeoGebra 和大角几何两种引擎，可在设置中切换
+- **GeoGebra 引擎**（默认）：功能完整，支持 .ggb 文件导入导出、多视图模式、撤销重做
+- **大角几何引擎**：现代化 REPL 命令系统，支持多画板、动画控制、精细样式管理
+- **引擎切换**：在设置面板中选择引擎，大角几何引擎需要配置 appId
+- **独立适配**：每个引擎独立实现，互不影响，保持向后兼容
+
 ---
 
 ## 技术栈
@@ -150,8 +157,8 @@ node server.js
 
 ```
 ai-ggb/
-├── index.html          # 主页面，包含画板区域和聊天面板
-├── app.js              # 核心应用逻辑（IIFE 封装）
+├── index.html              # 主页面，包含画板区域和聊天面板
+├── app.js                  # 核心应用逻辑（IIFE 封装）
 │   ├── 系统提示词定义
 │   ├── GeoGebra 工具定义（6 种）
 │   ├── AI 平台配置
@@ -161,13 +168,19 @@ ai-ggb/
 │   ├── GGB 美化功能
 │   ├── 导入/导出功能
 │   ├── 对话历史管理
-│   └── 配置管理
-├── styles.css          # 全部样式（CSS 变量体系）
-├── manifest.json       # PWA 清单文件
-├── favicon.svg         # 站点图标
-├── sw.js               # Service Worker 缓存脚本
-├── server.js           # Node.js 代理服务器（可选）
-└── README.md           # 项目文档
+│   ├── 配置管理
+│   └── 双引擎切换逻辑
+├── engines/                # 几何引擎抽象层（新增）
+│   ├── GeometryEngine.js   # 引擎接口定义
+│   ├── GeoGebraEngine.js   # GeoGebra 引擎适配器
+│   └── DajiaoEngine.js     # 大角几何引擎适配器
+├── engine-config.js        # 引擎配置管理器（新增）
+├── styles.css              # 全部样式（CSS 变量体系）
+├── manifest.json           # PWA 清单文件
+├── favicon.svg             # 站点图标
+├── sw.js                   # Service Worker 缓存脚本
+├── server.js               # Node.js 代理服务器（可选）
+└── README.md               # 项目文档
 ```
 
 ---
@@ -202,6 +215,12 @@ ai-ggb/
 ---
 
 ## 更新日志摘要
+
+### v1.7.0
+- **双引擎架构**：新增大角几何引擎支持，可在设置中切换 GeoGebra 和大角几何
+- **引擎抽象层**：引入 GeometryEngine 接口，实现引擎独立适配
+- **配置管理**：新增 engine-config.js，支持引擎配置持久化
+- **UI 增强**：设置面板新增引擎选择和 appId 配置
 
 ### v1.6.1
 - 移除 NVIDIA NIM 平台及其 API URL 配置

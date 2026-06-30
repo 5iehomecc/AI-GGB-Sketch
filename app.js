@@ -1956,4 +1956,149 @@
     _toastEl._timer = setTimeout(function () { if (_toastEl.parentNode) _toastEl.parentNode.removeChild(_toastEl); }, 2500);
   }
 
+  // ===== 双引擎支持：引擎切换逻辑 =====
+  var _originalHandleToolCall = handleToolCall;
+  var _engineReady = false;
+
+  function initEngineSystem() {
+    if (typeof window.GeoGebraEngine === 'undefined') return; // 引擎文件未加载
+
+    var engineConfig = window.engineConfig;
+    if (!engineConfig) return;
+
+    // 等待 GeoGebra 就绪后初始化
+    var checkInterval = setInterval(function() {
+      if (window.ggbApplet) {
+        clearInterval(checkInterval);
+        engineConfig.switchEngine('geogebra').then(function(engine) {
+          engine.app = window.ggbApplet;
+          _engineReady = true;
+        });
+      }
+    }, 200);
+
+    // 引擎选择 UI 事件
+    var engineSelect = document.getElementById('engine-select');
+    var dajiaoConfig = document.getElementById('dajiao-config');
+    var dajiaoAppIdInput = document.getElementById('dajiao-appid');
+
+    if (engineSelect) {
+      engineSelect.value = engineConfig.config.activeEngine;
+      if (engineConfig.config.activeEngine === 'dajiao') {
+        if (dajiaoConfig) dajiaoConfig.style.display = 'block';
+      }
+      if (dajiaoAppIdInput) {
+        dajiaoAppIdInput.value = engineConfig.config.dajiaoAppId || '';
+      }
+
+      engineSelect.addEventListener('change', function(e) {
+        var engineName = e.target.value;
+        if (engineName === 'dajiao') {
+          if (dajiaoConfig) dajiaoConfig.style.display = 'block';
+        } else {
+          if (dajiaoConfig) dajiaoConfig.style.display = 'none';
+          if (dajiaoAppIdInput) dajiaoAppIdInput.value = '';
+        }
+      });
+    }
+
+    // 保存配置时处理引擎切换
+    var btnSave = document.getElementById('btn-save-config');
+    if (btnSave) {
+      btnSave.addEventListener('click', function() {
+        var engineName = engineSelect ? engineSelect.value : 'geogebra';
+        var appId = dajiaoAppIdInput ? dajiaoAppIdInput.value.trim() : '';
+
+        engineConfig.updateDajiaoAppId(appId);
+
+        if (engineName === 'dajiao') {
+          if (!appId) {
+            alert('请先填写大角几何 appId');
+            return;
+          }
+          // 切换到大角几何引擎
+          switchToDajiao(appId);
+        } else {
+          // 切换到 GeoGebra（需要重载页面）
+          if (_engineReady && engineConfig.getCurrentEngine() && engineConfig.getCurrentEngine().getName() !== 'GeoGebra') {
+            if (confirm('切换回 GeoGebra 需要重新加载页面，是否继续？')) {
+              engineConfig.config.activeEngine = 'geogebra';
+              engineConfig.saveConfig();
+              location.reload();
+            }
+          }
+        }
+      }, true); // 使用捕获阶段，在原有保存逻辑之前执行
+    }
+  }
+
+  function switchToDajiao(appId) {
+    var engineConfig = window.engineConfig;
+    var container = document.getElementById('geogebra-container');
+    if (!container) return;
+
+    // 显示加载提示
+    showToast('正在切换到大角几何引擎...');
+
+    // 清空现有内容
+    container.innerHTML = '<div class="ggb-loading" style="display:flex;align-items:center;justify-content:center;height:100%;"><span>正在加载大角几何引擎...</span></div>';
+
+    var dajiaoEngine = new window.DajiaoEngine();
+    dajiaoEngine.init(container, { appId: appId, showLogo: false }).then(function() {
+      engineConfig.engines['dajiao'] = dajiaoEngine;
+      engineConfig.currentEngine = dajiaoEngine;
+      engineConfig.config.activeEngine = 'dajiao';
+      engineConfig.saveConfig();
+      showToast('已切换到大角几何引擎');
+    }).catch(function(e) {
+      showToast('切换失败: ' + e.message);
+      // 恢复 GeoGebra
+      container.innerHTML = '';
+      var engineSelect = document.getElementById('engine-select');
+      if (engineSelect) engineSelect.value = 'geogebra';
+      var dajiaoConfig = document.getElementById('dajiao-config');
+      if (dajiaoConfig) dajiaoConfig.style.display = 'none';
+    });
+  }
+
+  // 包装 handleToolCall，使用当前引擎
+  handleToolCall = function(name, args) {
+    var engineConfig = window.engineConfig;
+    if (!engineConfig || !_engineReady) {
+      return _originalHandleToolCall(name, args);
+    }
+
+    var engine = engineConfig.getCurrentEngine();
+    if (!engine || engine.getName() === 'GeoGebra') {
+      return _originalHandleToolCall(name, args);
+    }
+
+    // 使用大角几何引擎
+    switch (name) {
+      case 'getCanvasContext':
+        return engine.getCanvasContext();
+      case 'executeGeoGebraCommand':
+        return engine.executeCommand(args.command);
+      case 'resetGeoGebra':
+        return engine.reset();
+      case 'setPerspective':
+        return engine.setPerspective(args.mode);
+      case 'getSelectedObjects':
+        return engine.getSelectedObjects();
+      case 'evalLaTeX':
+        return engine.evalExpression(args.latex);
+      default:
+        return _originalHandleToolCall(name, args);
+    }
+  };
+
+  // 启动引擎系统
+  document.addEventListener('DOMContentLoaded', function() {
+    setTimeout(initEngineSystem, 500);
+  });
+  // 如果 DOM 已就绪
+  if (document.readyState !== 'loading') {
+    setTimeout(initEngineSystem, 500);
+  }
+
 })();
